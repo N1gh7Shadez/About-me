@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@N1gh7Shadez | Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
     <meta name="title" content="@N1gh7Shadez | Profile">
-    <meta name="description" content="Welcome to my profile. Click to connect via Line, Instagram, YouTube and more!">
+    <meta name="description" content="Welcome to my profile. Click to connect via Instagram, YouTube and more!">
     <link rel="icon" type="image/png" href="https://n1gh7shadez.vercel.app/N1s.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://n1gh7shadez.vercel.app">
     <meta property="og:title" content="@N1gh7Shadez | Profile">
-    <meta property="og:description" content="Welcome to my profile. Click to connect via Line, Instagram, YouTube and more!">
+    <meta property="og:description"
+        content="Welcome to my profile. Click to connect via Instagram, YouTube and more!">
     <meta property="og:image" content="https://n1gh7shadez.vercel.app/N1s.jpg">
     <style>
         * {
@@ -24,27 +28,30 @@
             user-select: none;
         }
 
-        html { overflow-x: hidden; }
+        html {
+            overflow-x: hidden;
+        }
+
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-            --neon-blue: #00d4ff;
-            --neon-purple: #9d50bb;
-            --neon-pink: #ff6ec7;
-            --dark-bg: #0a0a0a;
-            --glass-bg: rgba(255, 255, 255, 0.1);
+            --primary-blue: #2563eb;
+            --dark-blue: #1e40af;
+            --light-blue: #3b82f6;
+            --accent-blue: #60a5fa;
+            --dark-bg: #0f172a;
+            --darker-bg: #020617;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border-color: #334155;
         }
 
         body {
-            background: linear-gradient(45deg, #0c0c0c, #1a1a2e, #16213e, #0f3460);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            color: #ffffff;
-            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, #1a202c 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            width: 100%;
         }
 
         body::before {
@@ -54,70 +61,44 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            background: radial-gradient(circle at 30% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .main-container {
-            position: relative;
-            z-index: 2;
-            padding: 2rem 1rem;
+            padding: 3rem 1rem;
             width: 100%;
             max-width: 100vw;
         }
 
         .profile-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
             padding: 3rem 2rem;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(59, 130, 246, 0.1);
             position: relative;
             overflow: hidden;
-            transform: translateY(0);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 100%;
-            max-width: 100%;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(16px);
         }
 
         .profile-card::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6ec7, #00d4ff, #9d50bb, #ff6ec7);
-            background-size: 400% 400%;
-            border-radius: 32px;
-            z-index: -1;
-            animation: borderGlow 3s ease infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue), var(--accent-blue));
+            opacity: 0.8;
         }
 
         .profile-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 
-                0 35px 70px rgba(0, 0, 0, 0.4),
-                0 0 50px rgba(255, 110, 199, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(59, 130, 246, 0.2);
         }
 
         .profile-image-container {
@@ -127,139 +108,95 @@
         }
 
         .profile-image {
-            width: 150px;
-            height: 150px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            border: 4px solid transparent;
-            background: linear-gradient(45deg, #ff6ec7, #00d4ff, #9d50bb) border-box;
-            background-clip: padding-box, border-box;
-            box-shadow: 
-                0 0 30px rgba(255, 110, 199, 0.6),
-                0 0 60px rgba(0, 212, 255, 0.4),
-                inset 0 0 20px rgba(255, 255, 255, 0.1);
-            transition: all 0.4s ease;
-            animation: profilePulse 4s ease-in-out infinite;
-        }
-
-        @keyframes profilePulse {
-            0%, 100% { 
-                box-shadow: 
-                    0 0 30px rgba(255, 110, 199, 0.6),
-                    0 0 60px rgba(0, 212, 255, 0.4),
-                    inset 0 0 20px rgba(255, 255, 255, 0.1);
-            }
-            50% { 
-                box-shadow: 
-                    0 0 50px rgba(255, 110, 199, 0.8),
-                    0 0 80px rgba(0, 212, 255, 0.6),
-                    inset 0 0 30px rgba(255, 255, 255, 0.2);
-            }
+            border: 3px solid var(--primary-blue);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
         }
 
         .profile-image:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 
-                0 0 60px rgba(255, 110, 199, 0.8),
-                0 0 100px rgba(0, 212, 255, 0.6);
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.5), 0 12px 48px rgba(0, 0, 0, 0.5);
         }
 
         .title {
-            font-family: 'Orbitron', monospace;
-            font-weight: 900;
-            font-size: clamp(2rem, 5vw, 3rem);
-            background: linear-gradient(45deg, #ff6ec7, #00d4ff, #9d50bb, #ff6ec7);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: textGlow 3s ease infinite;
-            text-shadow: 0 0 30px rgba(255, 110, 199, 0.5);
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
-        }
-
-        @keyframes textGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
 
         .subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 2rem;
+            font-size: clamp(1rem, 2.5vw, 1.125rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
             line-height: 1.6;
-            word-break: break-word;
+            font-weight: 400;
         }
 
         .gaming-info {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 16px;
             padding: 1.5rem;
             margin: 2rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            word-break: break-word;
+            backdrop-filter: blur(8px);
+        }
+
+        .gaming-info p {
+            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        .gaming-info p:last-child {
+            margin-bottom: 0;
         }
 
         .copy-text {
-            color: #ffd700;
+            color: var(--accent-blue);
             cursor: pointer;
-            font-weight: bold;
-            text-decoration: underline;
-            transition: all 0.3s ease;
-            position: relative;
-            display: inline-block;
-            word-break: break-all;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
         .copy-text:hover {
-            color: #ff6ec7;
-            text-shadow: 0 0 10px rgba(255, 110, 199, 0.8);
-            transform: scale(1.05);
+            color: var(--text-primary);
+            background: rgba(37, 99, 235, 0.2);
+            transform: translateY(-1px);
         }
 
-        .copy-text::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(45deg, #ff6ec7, #00d4ff);
-            transition: width 0.3s ease;
-        }
-
-        .copy-text:hover::after { width: 100%; }
         .social-links {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            max-width: 500px;
+            gap: 0.75rem;
+            max-width: 480px;
             margin: 0 auto;
-            width: 100%;
         }
 
         .social-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
-            padding: 18px 30px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: #ffffff;
+            justify-content: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(30, 58, 138, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
             text-decoration: none;
-            font-weight: 700;
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
-            width: 100%;
-            max-width: 100%;
         }
 
         .social-btn::before {
@@ -269,105 +206,90 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            transition: left 0.4s ease;
         }
 
-        .social-btn:hover::before { left: 100%; }
+        .social-btn:hover::before {
+            left: 100%;
+        }
+
         .social-btn:hover {
-            transform: translateY(-5px) scale(1.02);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.3),
-                0 0 30px rgba(255, 110, 199, 0.3);
-            color: #ffffff;
+            transform: translateY(-2px);
+            background: rgba(37, 99, 235, 0.15);
+            border-color: var(--primary-blue);
+            color: var(--text-primary);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
         }
 
-        .facebook:hover { box-shadow: 0 15px 35px rgba(24, 119, 242, 0.4), 0 0 30px rgba(24, 119, 242, 0.3); }
-        .instagram:hover { box-shadow: 0 15px 35px rgba(225, 48, 108, 0.4), 0 0 30px rgba(225, 48, 108, 0.3); }
-        .youtube:hover { box-shadow: 0 15px 35px rgba(255, 0, 0, 0.4), 0 0 30px rgba(255, 0, 0, 0.3); }
-        .tiktok:hover { box-shadow: 0 15px 35px rgba(255, 0, 80, 0.4), 0 0 30px rgba(255, 0, 80, 0.3); }
-        .spotify:hover { box-shadow: 0 15px 35px rgba(30, 215, 96, 0.4), 0 0 30px rgba(30, 215, 96, 0.3); }
-        .discord:hover { box-shadow: 0 15px 35px rgba(88, 101, 242, 0.4), 0 0 30px rgba(88, 101, 242, 0.3); }
         .social-btn i {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
+            font-size: 1.25rem;
+            width: 24px;
+            text-align: center;
             flex-shrink: 0;
+            transition: transform 0.2s ease;
         }
 
-        .social-btn:hover i { transform: scale(1.2) rotate(10deg); }
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+        .social-btn:hover i {
+            transform: scale(1.1);
         }
 
-        .shape {
-            position: absolute;
-            background: linear-gradient(45deg, rgba(255, 110, 199, 0.1), rgba(0, 212, 255, 0.1));
-            border-radius: 50%;
-            animation: float 20s infinite linear;
+        /* [ Platform Colors ] */
+        .rov:hover {
+            border-color: #ff9100;
+            box-shadow: 0 8px 25px rgba(154, 103, 9, 0.2);
         }
 
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: -2s;
+        .riot:hover {
+            border-color: #e4404b;
+            box-shadow: 0 8px 25px rgba(255, 0, 81, 0.2);
         }
 
-        .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            right: 15%;
-            animation-delay: -8s;
+        .facebook:hover {
+            border-color: #1877f2;
+            box-shadow: 0 8px 25px rgba(24, 119, 242, 0.2);
         }
 
-        .shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: -15s;
+        .instagram:hover {
+            border-color: #e4405f;
+            box-shadow: 0 8px 25px rgba(228, 64, 95, 0.2);
         }
 
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-20px) rotate(90deg); }
-            50% { transform: translateY(0) rotate(180deg); }
-            75% { transform: translateY(20px) rotate(270deg); }
-            100% { transform: translateY(0) rotate(360deg); }
+        .youtube:hover {
+            border-color: #ff0000;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.2);
+        }
+
+        .tiktok:hover {
+            border-color: #ff0050;
+            box-shadow: 0 8px 25px rgba(255, 0, 80, 0.2);
+        }
+
+        .spotify:hover {
+            border-color: #1db954;
+            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.2);
+        }
+
+        .discord:hover {
+            border-color: #5865f2;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.2);
         }
 
         .loading-bar {
             position: fixed;
             top: 0;
             left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6ec7, #00d4ff, #9d50bb);
-            background-size: 200% 100%;
-            animation: loadingShine 2s ease infinite;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue), var(--accent-blue));
             z-index: 9999;
             width: 0%;
             transition: width 0.3s ease;
         }
 
-        @keyframes loadingShine {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
         .fade-in {
             opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
         }
 
         @keyframes fadeInUp {
@@ -377,11 +299,15 @@
             }
         }
 
+        /* [ Mobile Responsive ] */
         @media (max-width: 768px) {
-            .main-container { padding: 1rem 0.5rem; }
+            .main-container {
+                padding: 2rem 1rem;
+            }
+
             .profile-card {
                 margin: 0.5rem;
-                padding: 2rem 1rem;
+                padding: 2rem 1.5rem;
                 border-radius: 20px;
             }
 
@@ -391,35 +317,30 @@
             }
 
             .social-btn {
-                padding: 15px 20px;
-                gap: 10px;
+                padding: 0.875rem 1.25rem;
+                gap: 0.875rem;
             }
 
-            .social-btn i { font-size: 1.3rem; }
             .gaming-info {
-                padding: 1rem;
+                padding: 1.25rem;
                 margin: 1.5rem 0;
             }
-
-            .profile-card:hover { transform: translateY(-5px) scale(1.01); }
-            .social-btn:hover { transform: translateY(-3px) scale(1.01); }
-            .profile-image:hover { transform: scale(1.05) rotate(2deg); }
-            .shape:nth-child(2),
-            .shape:nth-child(3) { display: none; }
         }
-        
+
         @media (max-width: 480px) {
             .profile-card {
-                padding: 1.5rem 0.75rem;
+                padding: 1.5rem 1rem;
                 margin: 0.25rem;
             }
 
             .social-btn {
-                padding: 12px 15px;
+                padding: 0.75rem 1rem;
                 font-size: 0.95rem;
             }
 
-            .gaming-info { padding: 0.75rem; }
+            .gaming-info {
+                padding: 1rem;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -428,62 +349,64 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-
-            .floating-shapes { display: none; }
         }
     </style>
 </head>
+
 <body>
     <div class="loading-bar" id="loadingBar"></div>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
+
     <div class="container-fluid main-container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="profile-card fade-in">
                     <div class="profile-image-container">
-                        <img src="https://n1gh7shadez.vercel.app/N1s.jpg" alt="N1gh7Shadez Profile" class="profile-image">
+                        <img src="https://n1gh7shadez.vercel.app/N1s.jpg" alt="N1gh7Shadez Profile"
+                            class="profile-image">
                     </div>
-                    
+
                     <h1 class="title">@N1gh7Shadez</h1>
-                    <p class="subtitle">Welcome to my digital realm<br>Connect with me across the metaverse</p>
-                    
-                    <div class="gaming-info">
-                        <p><strong>RoV:</strong> <span class="copy-text" data-copy="N1gh7Shadez">N1gh7Shadez</span></p>
-                        <p><strong>Riot:</strong> <span class="copy-text" data-copy="N1gh7Shadez#17250">N1gh7Shadez#17250</span></p>
-                    </div>
-                    
+                    <p class="subtitle">Welcome to my digital space<br>Connect with me across platforms</p>
                     <p class="subtitle">Click any platform to explore my content</p>
-                    
+
                     <div class="social-links">
-                        <a href="https://www.facebook.com/do.mxn.do.mxn.948665/" target="_blank" class="social-btn facebook">
+                        <a href="#rov" class="social-btn rov ignore-link copy-text" data-copy="N1gh7Shadez">
+                            ROV
+                            <span>N1gh7Shadez</span>
+                        </a>
+                        <a href="#riot" class="social-btn riot ignore-link copy-text" data-copy="N1gh7Shadez#17250">
+                            RIOT
+                            <span>N1gh7Shadez#17250</span>
+                        </a>
+                        <a href="https://www.facebook.com/do.mxn.do.mxn.948665/" target="_blank"
+                            class="social-btn facebook">
                             <i class="fab fa-facebook-f"></i>
                             <span>Facebook</span>
                         </a>
-                        
-                        <a href="https://www.instagram.com/_n1ghtshade_/profilecard/" target="_blank" class="social-btn instagram">
+
+                        <a href="https://www.instagram.com/_n1ghtshade_/profilecard/" target="_blank"
+                            class="social-btn instagram">
                             <i class="fab fa-instagram"></i>
                             <span>Instagram</span>
                         </a>
-                        
-                        <a href="https://www.youtube.com/@n1ghtshadez?sub_confirmation=1" target="_blank" class="social-btn youtube">
+
+                        <a href="https://www.youtube.com/@n1ghtshadez?sub_confirmation=1" target="_blank"
+                            class="social-btn youtube">
                             <i class="fab fa-youtube"></i>
                             <span>YouTube</span>
                         </a>
-                        
+
                         <a href="https://www.tiktok.com/@n1gh7shadez" target="_blank" class="social-btn tiktok">
                             <i class="fab fa-tiktok"></i>
                             <span>TikTok</span>
                         </a>
-                        
-                        <a href="https://open.spotify.com/user/ibpz1xtf2pj9a7anrvnft1ygl" target="_blank" class="social-btn spotify">
+
+                        <a href="https://open.spotify.com/user/ibpz1xtf2pj9a7anrvnft1ygl" target="_blank"
+                            class="social-btn spotify">
                             <i class="fab fa-spotify"></i>
                             <span>Spotify</span>
                         </a>
-                        
+
                         <a href="https://discord.com/invite/JZVN5h8Nqw" target="_blank" class="social-btn discord">
                             <i class="fab fa-discord"></i>
                             <span>Discord</span>
@@ -493,6 +416,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         window.addEventListener('load', () => {
@@ -503,15 +427,15 @@
 
         document.querySelectorAll('.copy-text').forEach(el => {
             el.addEventListener('click', e => {
-                const text = e.target.dataset.copy;
-                const originalText = e.target.textContent;
+                const text = e.target.dataset.copy
+                const originalText = e.target.textContent
                 navigator.clipboard.writeText(text).then(() => {
                     e.target.textContent = 'Copied!'
-                    e.target.style.color = '#00ff88'
+                    e.target.style.color = '#10b981'
 
                     setTimeout(() => {
                         e.target.textContent = originalText
-                        e.target.style.color = '#ffd700'
+                        e.target.style.color = '#f1f3f7'
                     }, 1000)
                 })
             })
@@ -533,17 +457,22 @@
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animationDelay = Math.random() * 0.5 + 's'
+                    entry.target.style.animationDelay = Math.random() * 0.3 + 's'
                     entry.target.classList.add('fade-in')
                     observer.unobserve(entry.target)
                 }
             })
         }, {
             threshold: 0.1,
-            rootMargin: '50px'
+            rootMargin: '30px'
+        })
+
+        document.querySelectorAll('.ignore-link').forEach(el => {
+            el.addEventListener('click', e => e.preventDefault())
         })
 
         document.querySelectorAll('.social-btn').forEach(btn => { observer.observe(btn) })
     </script>
 </body>
-                                                                                                                     </html>
+
+</html>
