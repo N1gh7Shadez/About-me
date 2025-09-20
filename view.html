@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ni- rpc</title>
+</head>
+
+<body>
+    <h1>monmon rpc</h1>
+
+    <div>
+        <button id="refreshBtn" onclick="userData()">F5</button>
+        <button onclick="clearCache()">clean cache</button>
+        <label>
+            <input type="checkbox" id="autoRefresh"> auto refresh (30s)
+        </label>
+    </div>
+
+    <hr>
+
+    <div id="content">
+        <p>loading data...</p>
+    </div>
+
+    <script>
+        const API_URL = 'https://n1gh7shadez.vercel.app/api/dsc-status'
+
+        let autoF5
+
+        document.getElementById('autoRefresh').addEventListener('change', function (e) {
+            if (e.target.checked) {
+                autoF5 = setInterval(userData, 30000)
+                console.log('Auto-refresh enabled')
+            } else {
+                clearInterval(autoF5)
+                console.log('Auto-refresh disabled')
+            }
+        })
+
+        async function userData() {
+            const refreshBtn = document.getElementById('refreshBtn')
+            const content = document.getElementById('content')
+
+            refreshBtn.disabled = true
+            refreshBtn.textContent = 'Loading...'
+
+            try {
+                const response = await fetch(API_URL)
+                const data = await response.json()
+
+                if (response.ok) showUserData(data)
+                else throw new Error(data.error || 'Failed to fetch data')
+            } catch (error) {
+                console.error('Error fetching data:', error)
+                content.innerHTML = `
+                <div style="border:1px solid red; padding:10px; background:#ffe6e6;">
+                    <strong>Error:</strong> ${error.message}<br>
+                    <small>Make sure to update the API_URL in the JavaScript code with your actual Vercel function URL.</small>
+                </div>`
+            } finally {
+                refreshBtn.disabled = false
+                refreshBtn.textContent = 'Refresh'
+            }
+        }
+
+        function showUserData(data) {
+            const content = document.getElementById('content')
+
+            let html = ''
+
+            // cache info
+            if (data.cached) html += `<div style="border:1px solid blue; padding:5px; background:#e6f3ff; margin-bottom:10px;">Cached data (${data.cache_age}s old) - Updated: ${new Date(data.timestamp).toLocaleString()}</div>`
+            else html += `<div style="border:1px solid green; padding:5px; background:#e6ffe6; margin-bottom:10px;">Fresh data - Updated: ${new Date(data.timestamp).toLocaleString()}</div>`
+
+            // user info
+            html += `<div style="border:1px solid black; padding:10px; margin-bottom:10px;">`
+            html += `<h2>User Info</h2>`
+            html += `<p><strong>User ID:</strong> ${data.user_id}</p>`
+            html += `<p><strong>Status:</strong> ${data.status}</p>`
+            if (data.avatar !== 'null') html += `<p><strong>Avatar:</strong> <img src="${data.avatar}" width="50" height="50" alt="Avatar"></p>`
+            html += `</div>`
+
+            // vc
+            html += `<div style="border:1px solid black; padding:10px; margin-bottom:10px;">`
+            html += `<h2>Voice Channel</h2>`
+
+            if (data.vc_channel && data.vc_channel !== 'null') {
+                html += `<p><strong>Server:</strong> ${data.vc_channel.guild}</p>`
+                html += `<p><strong>Channel:</strong> ${data.vc_channel.channel}</p>`
+                html += `<p><strong>Members:</strong></p>`
+                html += `<ul>`
+                data.vc_channel.members.forEach(member => {
+                    html += `<li>${member.display_name}`
+                    if (member.avatar !== 'null') html += ` <img src="${member.avatar}" width="20" height="20" alt="Avatar">`
+                    html += `</li>`
+                })
+                html += `</ul>`
+            } else html += `<p>Not in a voice channel</p>`
+            html += `</div>`
+
+            // rpc
+            html += `<div style="border:1px solid black; padding:10px; margin-bottom:10px;">`
+            html += `<h2>Activities</h2>`
+
+            if (data.activities && data.activities.length > 0) {
+                data.activities.forEach(activity => {
+                    html += `<div style="border:1px solid gray; padding:5px; margin:5px 0; background:#f9f9f9;">`
+                    html += `<h3>${activity.name}</h3>`
+                    html += `<p><strong>Type:</strong> ${activity.type}</p>`
+
+                    if (activity.details) html += `<p><strong>Details:</strong> ${activity.details}</p>`
+                    if (activity.state) html += `<p><strong>State:</strong> ${activity.state}</p>`
+
+                    if (activity.timestamps.start !== 'null') {
+                        const startTime = new Date(activity.timestamps.start)
+                        const elapsed = Math.floor((Date.now() - startTime.getTime()) / 1000)
+                        const hours = Math.floor(elapsed / 3600)
+                        const minutes = Math.floor((elapsed % 3600) / 60)
+                        html += `<p><strong>Duration:</strong> ${hours}h ${minutes}m</p>`
+                    }
+
+                    if (activity.large_image !== 'null') html += `<p><strong>Image:</strong> <img src="${activity.large_image}" width="60" height="60" alt="Activity image"></p>`
+
+                    html += `</div>`
+                })
+            } else html += `<p>No activities detected</p>`
+
+            html += `</div>`
+
+            content.innerHTML = html
+        }
+
+        async function clearCache() {
+            try {
+                await userData()
+                alert('Data refreshed!')
+            } catch (error) { alert('Error: ' + error.message); }
+        }
+
+        userData()
+    </script>
+</body>
+
+</html>

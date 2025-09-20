@@ -1,0 +1,19 @@
+{
+  "name": "mon",
+  "version": "1.0.0",
+  "description": "mon",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step needed'",
+    "start": "vercel dev"
+  },
+  "author": "mon",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^14.22.1"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
