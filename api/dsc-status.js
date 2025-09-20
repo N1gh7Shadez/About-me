@@ -22,10 +22,6 @@ export default async function handler(req, res) {
     }
 
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
-    if (req.method === 'PUSH') {
-        cache = new Map()
-        return res.status(405).json({ success: true })
-    }
 
     const cacheKey = `discord-user-${USER_ID}`
     const cachedData = cache.get(cacheKey)

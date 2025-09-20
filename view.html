@@ -14,7 +14,7 @@
         <button id="refreshBtn" onclick="userData()">F5</button>
         <button onclick="clearCache()">clean cache</button>
         <label>
-            <input type="checkbox" id="autoRefresh"> auto refresh (30s)
+            <input type="checkbox" id="autoRefresh"> auto refresh (60s)
         </label>
     </div>
 
@@ -31,7 +31,7 @@
 
         document.getElementById('autoRefresh').addEventListener('change', function (e) {
             if (e.target.checked) {
-                autoF5 = setInterval(userData, 30000)
+                autoF5 = setInterval(userData, 60_000)
                 console.log('Auto-refresh enabled')
             } else {
                 clearInterval(autoF5)
@@ -135,22 +135,9 @@
 
         async function clearCache() {
             try {
-                const response = await fetch(API_URL, {method: 'PUSH'})
-                const data = await response.json()
-
-                if (response.ok) await userData()
-                else throw new Error(data.error || 'Failed to fetch data')
-            } catch (error) {
-                console.error('Error fetching data:', error)
-                content.innerHTML = `
-                <div style="border:1px solid red; padding:10px; background:#ffe6e6;">
-                    <strong>Error:</strong> ${error.message}<br>
-                    <small>Make sure to update the API_URL in the JavaScript code with your actual Vercel function URL.</small>
-                </div>`
-            } finally {
-                refreshBtn.disabled = false
-                refreshBtn.textContent = 'Refresh'
-            }
+                await userData()
+                alert('Data refreshed!')
+            } catch (error) { alert('Error: ' + error.message); }
         }
 
         userData()
