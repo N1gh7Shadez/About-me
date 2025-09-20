@@ -118,7 +118,8 @@
                         const elapsed = Math.floor((Date.now() - startTime.getTime()) / 1000)
                         const hours = Math.floor(elapsed / 3600)
                         const minutes = Math.floor((elapsed % 3600) / 60)
-                        html += `<p><strong>Duration:</strong> ${hours}h ${minutes}m</p>`
+                        const second = Math.floor((elapsed % 3600) / 60 / 60)
+                        html += `<p><strong>Duration:</strong> ${hours}h ${minutes}m ${second}s</p>`
                     }
 
                     if (activity.large_image !== 'null') html += `<p><strong>Image:</strong> <img src="${activity.large_image}" width="60" height="60" alt="Activity image"></p>`
