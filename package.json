@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "mon",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'No build step needed'",
-    "start": "vercel dev"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "mon",
   "type": "module",
