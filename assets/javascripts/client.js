@@ -170,6 +170,7 @@ class DiscordDashboard {
 
             const a = document.createElement('a')
             a.className = 'game-icon'
+            a.title = game.name
 
             if (game.url.startsWith('http')) {
                 a.href = game.url
@@ -188,36 +189,12 @@ class DiscordDashboard {
                 const img = document.createElement('img')
                 img.src = game.img
                 img.alt = game.name
-                img.style.width = '60%'
-                img.style.height = '60%'
-                img.style.objectFit = 'contain'
                 a.appendChild(img)
             } else {
                 a.textContent = game.name
             }
 
-            const tooltip = document.createElement('div')
-            tooltip.className = 'tooltip'
-            tooltip.textContent = game.name
-
-            // add tooltip arrow
-            const arrow = document.createElement('div')
-            tooltip.appendChild(arrow)
-
             container.appendChild(a)
-            container.appendChild(tooltip)
-
-            // show/hide tooltip on hover
-            container.addEventListener('mouseenter', () => {
-                tooltip.style.opacity = '1'
-                tooltip.style.visibility = 'visible'
-            })
-
-            container.addEventListener('mouseleave', () => {
-                tooltip.style.opacity = '0'
-                tooltip.style.visibility = 'hidden'
-            })
-
             gamesGrid.appendChild(container)
         })
     }
