@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 
 const TOKEN = process.env.DISCORD_BOT_TOKEN
-const USER_ID = "658664592209215493"
+const USER_ID = "660742557009051659"
 
 let cache = new Map()
 const CACHE_DURATION = 1 * 60 * 1000
