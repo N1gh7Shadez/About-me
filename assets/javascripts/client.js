@@ -907,6 +907,33 @@ class InfiniteScroll {
     }
 }
 
+// DOM elements
+const countEl = document.getElementById('followerCount')
+const btn = document.getElementById('visitBtn')
+
+const preventDrag = el => {
+    el.draggable = false
+    el.ondragstart = () => false
+}
+
+// GET
+async function getCount() {
+    if (!countEl) return
+    const res = await fetch('https://n1gh7shadez.vercel.app/api/visit')
+    const data = await res.json()
+    countEl.textContent = `${data.count}`
+    localStorage.setItem('last-count', data.count)
+}
+
+// POST
+async function addVisit() {
+    if (!countEl) return
+    const res = await fetch('https://n1gh7shadez.vercel.app/api/visit', { method: 'POST' })
+    const data = await res.json()
+    countEl.textContent = `${data.count}`
+    localStorage.setItem('last-count', data.count)
+}
+
 // initialization
 const initDashboard = () => {
     const isLowEndDevice = () => navigator.hardwareConcurrency <= 2 || navigator.deviceMemory <= 4 || /Android.*Chrome\/[0-5]/.test(navigator.userAgent)
@@ -917,46 +944,27 @@ const initDashboard = () => {
     }
 
     const dashboard = new DiscordDashboard()
-
     window.addEventListener('beforeunload', () => { dashboard.destroy() })
 
     const gamesGrid = document.getElementById('gamesGrid')
     new InfiniteScroll(gamesGrid)
 
     setInterval(getCount, 16000)
-        ; (async () => addVisit())()
 
     return dashboard
 }
 
-const preventDrag = el => {
-    el.draggable = false
-    el.ondragstart = () => false
+document.addEventListener('DOMContentLoaded', () => {
+    countEl.textContent = localStorage.getItem('last-count') || '0'
+
+    initDashboard()
+    afterDOM()
+})
+
+const afterDOM = async () => {
+    await addVisit()
 }
 
-const visit = document.getElementById('followerCount')
-const api = 'https://n1gh7shadez.vercel.app/api/visit'
-const countEl = document.getElementById('count')
-const btn = document.getElementById('visitBtn')
-
-// GET
-async function getCount() {
-    const res = await fetch(api)
-    const data = await res.json()
-
-    countEl.textContent = `${data.count}`
-}
-
-// POST
-async function addVisit() {
-    const res = await fetch(api, { method: 'POST' })
-    const data = await res.json()
-
-    countEl.textContent = `${data.count}`
-}
-
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDashboard)
-else initDashboard()
 
 document.querySelectorAll('img, a').forEach(preventDrag)
 new MutationObserver(mutations => {
