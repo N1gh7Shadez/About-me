@@ -908,8 +908,7 @@ class InfiniteScroll {
 }
 
 // DOM elements
-const visit = document.getElementById('followerCount')
-const countEl = document.getElementById('count')
+const countEl = document.getElementById('followerCount')
 const btn = document.getElementById('visitBtn')
 
 const preventDrag = el => {
