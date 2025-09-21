@@ -126,6 +126,7 @@ export default async function handler(req, res) {
 
         const data = {
             user_id: USER_ID,
+            name: member ? udecode(member.user.globalName) : "n1gh7shadez", 
             avatar: member && member.displayAvatarURL() ? member.displayAvatarURL() : "null",
             status: member && member.presence ? member.presence.status : "null",
             vc_channel: vc_info || "null",
