@@ -70,7 +70,7 @@ export default async function handler(req, res) {
                         vcMembers.push({
                             name: udecode(vcMember.user.username),
                             display_name: udecode(vcMember.displayName),
-                            avatar: vcMember.displayAvatarURL() || "null"
+                            avatar: vcMember.displayAvatarURL() || null
                         })
                     }
 
@@ -101,11 +101,15 @@ export default async function handler(req, res) {
                 }
 
                 let buttons = null
-                if (activity.buttons && activity.buttons.length > 0) {
-                    buttons = activity.buttons.map(button => ({
-                        label: button.label || "null",
-                        url: button.url || "null"
-                    }))
+                if (activity.buttons && Array.isArray(activity.buttons) && activity.buttons.length > 0) {
+                    buttons = activity.buttons
+                        .filter(button => button && button.label && button.url)
+                        .map(button => ({
+                            label: udecode(button.label),
+                            url: button.url
+                        }))
+
+                    if (buttons.length === 0) buttons = null
                 }
 
                 activities_data.push({
@@ -113,12 +117,12 @@ export default async function handler(req, res) {
                     type: activity.type.toString(),
                     details: activity.details || null,
                     state: activity.state || null,
-                    large_image: img_large || "null",
-                    small_image: img_small || "null",
-                    buttons: buttons || "null",
+                    large_image: img_large || null,
+                    small_image: img_small || null,
+                    buttons: buttons,
                     timestamps: {
-                        start: activity.timestamps?.start ? new Date(activity.timestamps.start).toISOString() : "null",
-                        end: activity.timestamps?.end ? new Date(activity.timestamps.end).toISOString() : "null"
+                        start: activity.timestamps?.start ? new Date(activity.timestamps.start).toISOString() : null,
+                        end: activity.timestamps?.end ? new Date(activity.timestamps.end).toISOString() : null
                     }
                 })
             }
@@ -126,9 +130,9 @@ export default async function handler(req, res) {
 
         const data = {
             user_id: USER_ID,
-            avatar: member && member.displayAvatarURL() ? member.displayAvatarURL() : "null",
-            status: member && member.presence ? member.presence.status : "null",
-            vc_channel: vc_info || "null",
+            avatar: member && member.displayAvatarURL() ? member.displayAvatarURL() : null,
+            status: member && member.presence ? member.presence.status : null,
+            vc_channel: vc_info || null,
             activities: activities_data,
             cached: false,
             timestamp: new Date().toISOString()
