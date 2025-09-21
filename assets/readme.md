@@ -4,9 +4,10 @@
 
 ## tree
 - audios
-  - Shelter.mp3
+  - Be_a_flower.mp3
 - images
   - N1s.jpg
+  - maomao.gif
 - javascripts
   - client.js
 - styles
