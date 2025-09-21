@@ -9,6 +9,10 @@ class DiscordDashboard {
             { name: 'aitji #5', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
             { name: 'aitji #6', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
             { name: 'aitji #7', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #8', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #9', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #10', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #11', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
         ]
 
         this.rpcData = null

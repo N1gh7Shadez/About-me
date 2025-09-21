@@ -779,8 +779,6 @@ body {
 
   .header {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
     gap: 15px;
   }
 
@@ -854,6 +852,11 @@ body {
   .followers {
     padding: 6px 12px;
     font-size: 0.9rem;
+    position: fixed;
+    bottom: 16px;
+    left: 90%;
+    transform: translateX(-50%);
+    z-index: 999;
   }
 }
 
