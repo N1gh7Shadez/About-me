@@ -779,7 +779,7 @@ class DiscordDashboard {
 
             const buttonsHtml = ''
 
-            let imagesrc = activity.large_image ||  activity.small_image
+            let imagesrc = activity.large_image || activity.small_image
             if (activity.name === "Minecraft") imagesrc = "../../assets/images/Minecraft.png"
 
             return `
@@ -843,6 +843,70 @@ class DiscordDashboard {
     }
 }
 
+class InfiniteScroll {
+    constructor(container) {
+        this.container = container
+        this.originalItems = []
+        this.isInfiniteMode = false
+        this.scrollThreshold = 100
+
+        this.init()
+        this.bindEvents()
+    }
+
+    init() {
+        this.originalItems = Array.from(this.container.children)
+        this.checkScreenSize()
+    }
+
+    bindEvents() {
+        window.addEventListener('resize', () => this.checkScreenSize())
+        this.container.addEventListener('scroll', () => this.handleScroll())
+    }
+
+    checkScreenSize() {
+        const shouldBeInfinite = window.innerWidth <= 748;
+
+        if (shouldBeInfinite && !this.isInfiniteMode) this.enableInfiniteScroll();
+        else if (!shouldBeInfinite && this.isInfiniteMode) this.disableInfiniteScroll()
+    }
+
+    enableInfiniteScroll() {
+        this.isInfiniteMode = true
+        this.container.innerHTML = ''
+
+        const fragment = document.createDocumentFragment()
+
+        for (let i = 0; i < 3; i++) this.originalItems.forEach(item => {
+            const clone = item.cloneNode(true)
+            fragment.appendChild(clone)
+        })
+
+        this.container.appendChild(fragment)
+        this.itemWidth = this.originalItems.length * (48 + 8)
+        this.totalWidth = this.itemWidth * 3
+
+        this.container.scrollLeft = this.itemWidth
+    }
+
+    disableInfiniteScroll() {
+        this.isInfiniteMode = false
+
+        this.container.innerHTML = ''
+        this.originalItems.forEach(item => this.container.appendChild(item))
+    }
+
+    handleScroll() {
+        if (!this.isInfiniteMode) return
+
+        const scrollLeft = this.container.scrollLeft
+        const maxScroll = this.container.scrollWidth - this.container.clientWidth
+
+        if (scrollLeft < this.scrollThreshold) this.container.scrollLeft = scrollLeft + this.itemWidth
+        else if (scrollLeft > maxScroll - this.scrollThreshold) this.container.scrollLeft = scrollLeft - this.itemWidth
+    }
+}
+
 // initialization
 const initDashboard = () => {
     const isLowEndDevice = () => navigator.hardwareConcurrency <= 2 || navigator.deviceMemory <= 4 || /Android.*Chrome\/[0-5]/.test(navigator.userAgent)
@@ -855,8 +919,26 @@ const initDashboard = () => {
     const dashboard = new DiscordDashboard()
 
     window.addEventListener('beforeunload', () => { dashboard.destroy() })
+
+    const gamesGrid = document.getElementById('gamesGrid')
+    new InfiniteScroll(gamesGrid)
     return dashboard
+}
+
+const preventDrag = el => {
+    el.draggable = false
+    el.ondragstart = () => false
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDashboard)
 else initDashboard()
+
+document.querySelectorAll('img, a').forEach(preventDrag)
+new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+            if (node.tagName === 'IMG' || node.tagName === 'A') preventDrag(node)
+            if (node.querySelectorAll) node.querySelectorAll('img, a').forEach(preventDrag)
+        })
+    })
+}).observe(document.body, { childList: true, subtree: true })

@@ -5,7 +5,8 @@
 }
 
 body {
-  font-family: JetBrains Mono, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: JetBrains Mono, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
   background: #0a0e1a;
   color: #ffffff;
   overflow-x: hidden;
@@ -1016,4 +1017,55 @@ body {
   .activity-details {
     font-size: 0.8rem;
   }
+}
+
+.games-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+  margin-top: -15px;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
+
+@media (max-width: 748px) {
+  .games-grid {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: auto;
+    padding: 10px 15px;
+    position: relative;
+  }
+
+  .games-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .games-grid > div {
+    flex-shrink: 0;
+    min-width: auto;
+  }
+}
+
+.game-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.game-icon:hover {
+  transform: scale(1.1);
+}
+
+.game-icon img {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
 }
