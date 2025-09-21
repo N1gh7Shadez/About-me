@@ -2,16 +2,16 @@ class DiscordDashboard {
     constructor() {
         this.games = [
             // add more game this is place holder
+            { name: 'Youtube', url: 'https://www.youtube.com/@n1ghtshadez?sub_confirmation=1', img: "../../assets/images/Youtube.png" },
             { name: 'Facebook', url: 'https://www.facebook.com/N1gh7Shadez/', img: "../../assets/images/Facebook.png" },
             { name: 'Instagram', url: 'https://www.instagram.com/_n1ghtshade_/profilecard/', img: "../../assets/images/Instagram.png" },
-            { name: 'Youtube', url: 'https://www.youtube.com/@n1ghtshadez?sub_confirmation=1', img: "../../assets/images/Youtube.png" },
             { name: 'Tiktok', url: 'https://www.tiktok.com/@n1gh7shadez', img: "../../assets/images/Tiktok.png" },
             { name: 'Twitch', url: 'https://www.twitch.tv/n1gh7shadez', img: "../../assets/images/Twitch.png" },
             { name: 'Spotify', url: 'https://open.spotify.com/user/ibpz1xtf2pj9a7anrvnft1ygl', img: "../../assets/images/Spotify.png" },
             { name: 'Discord', url: 'https://discord.com/invite/JZVN5h8Nqw', img: "../../assets/images/Discord.png" },
             { name: 'Roblox', url: 'https://www.roblox.com/users/1207490727/profile', img: "../../assets/images/Roblox.png" },
-            { name: 'RoV', url: 'N1gh7Shadez', img: "../../assets/images/RoV.png" },
             { name: 'Riot', url: 'N1gh7Shadez#17250', img: "../../assets/images/Riot.png" },
+            { name: 'RoV', url: 'N1gh7Shadez', img: "../../assets/images/RoV.png" },
             { name: 'LINE Rangers', url: '308c37e3', img: "../../assets/images/LINERangers.png" },
         ]
 
