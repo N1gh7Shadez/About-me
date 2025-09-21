@@ -944,7 +944,7 @@ async function getCount() {
     const res = await fetch(api)
     const data = await res.json()
 
-    countEl.textContent = data.count
+    countEl.textContent = `${data.count}`
 }
 
 // POST
@@ -952,7 +952,7 @@ async function addVisit() {
     const res = await fetch(api, { method: 'POST' })
     const data = await res.json()
 
-    countEl.textContent = data.count
+    countEl.textContent = `${data.count}`
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDashboard)
