@@ -1,6 +1,27 @@
 {
     "routes": [
         {
+            "src": "/assets/images/(.*)",
+            "headers": {
+                "cache-control": "public, max-age=31536000, immutable"
+            },
+            "dest": "/assets/images/$1"
+        },
+        {
+            "src": "/assets/audios/(.*)",
+            "headers": {
+                "cache-control": "public, max-age=31536000, immutable"
+            },
+            "dest": "/assets/audios/$1"
+        },
+        {
+            "src": "/assets/videos/(.*)",
+            "headers": {
+                "cache-control": "public, max-age=31536000, immutable"
+            },
+            "dest": "/assets/videos/$1"
+        },
+        {
             "handle": "filesystem"
         },
         {
