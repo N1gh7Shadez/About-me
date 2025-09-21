@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>visitor-counter</title>
+</head>
+
+<body>
+    <h1>visitor-counter</h1>
+    <p id="count">loading...</p>
+    <button id="visitBtn">+1</button>
+
+    <script>
+        const api = '/api/visit'
+        const countEl = document.getElementById('count')
+        const btn = document.getElementById('visitBtn')
+
+        // (GET)
+        async function getCount() {
+            const res = await fetch(api)
+            const data = await res.json()
+            countEl.textContent = `visitors: ${data.count}`
+        }
+
+        // (POST)
+        async function addVisit() {
+            const res = await fetch(api, { method: 'POST' })
+            const data = await res.json()
+            countEl.textContent = `visitors: ${data.count}`
+        }
+
+        btn.addEventListener('click', addVisit)
+        getCount()
+    </script>
+</body>
+
+</html>

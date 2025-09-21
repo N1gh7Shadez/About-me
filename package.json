@@ -9,7 +9,8 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "discord.js": "^14.22.1"
+    "discord.js": "^14.22.1",
+    "firebase-admin": "^13.5.0"
   },
   "engines": {
     "node": ">=16"
