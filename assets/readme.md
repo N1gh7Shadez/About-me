@@ -4,8 +4,17 @@
 
 ## tree
 - audios
+  - Shelter.mp3
 - images
   - N1s.jpg
 - javascripts
+  - client.js
 - styles
+  - client.js
 - videos
+  - wpp.mobile.mp4  @ Poor   Q
+  - wpp.ios.mp4     @ Mid    Q
+  - wpp.mp4         @ Original
+
+## todo
+- in [audios] should have lower Q for slow internet
