@@ -778,6 +778,10 @@ class DiscordDashboard {
             }
 
             const buttonsHtml = ''
+
+            let imagesrc = activity.large_image ||  activity.small_image
+            if (activity.name === "Minecraft") imagesrc = "../../assets/images/Minecraft.png"
+
             return `
             <div class="rpc-activity" data-activity-index="${index}">
                 ${index === 0 ? `
@@ -790,11 +794,8 @@ class DiscordDashboard {
                 </div>` : ''}
 
                 <div class="rpc-content">
-                    ${(activity.large_image && activity.large_image !== "null") || (activity.small_image && activity.small_image !== "null")
-                    ? `<div class="activity-image"><img src="${activity.large_image && activity.large_image !== "null"
-                        ? activity.large_image
-                        : activity.small_image
-                    }" alt="Activity" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"></div>`
+                    ${imagesrc && imagesrc !== "null"
+                    ? `<div class="activity-image"><img src="${imagesrc}" alt="Activity" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"></div>`
                     : ''}
                     <div class="activity-info">
                         <div class="activity-title">${activity.name || 'Activity Title'}</div>
