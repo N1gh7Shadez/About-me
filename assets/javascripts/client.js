@@ -922,6 +922,7 @@ async function getCount() {
     const res = await fetch('https://n1gh7shadez.vercel.app/api/visit')
     const data = await res.json()
     countEl.textContent = `${data.count}`
+    localStorage.setItem('last-count', data.count)
 }
 
 // POST
@@ -930,6 +931,7 @@ async function addVisit() {
     const res = await fetch('https://n1gh7shadez.vercel.app/api/visit', { method: 'POST' })
     const data = await res.json()
     countEl.textContent = `${data.count}`
+    localStorage.setItem('last-count', data.count)
 }
 
 // initialization
@@ -952,10 +954,17 @@ const initDashboard = () => {
     return dashboard
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    countEl.textContent = localStorage.getItem('last-count') || '0'
+
     initDashboard()
-    await addVisit()
+    afterDOM()
 })
+
+const afterDOM = async () => {
+    await addVisit()
+}
+
 
 document.querySelectorAll('img, a').forEach(preventDrag)
 new MutationObserver(mutations => {
