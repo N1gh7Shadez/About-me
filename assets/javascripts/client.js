@@ -2,13 +2,13 @@ class DiscordDashboard {
     constructor() {
         this.games = [
             // add more game this is place holder
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
-            { name: 'aitji', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #1', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #2', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #3', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #4', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #5', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #6', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
+            { name: 'aitji #7', url: 'https://aitji.is-a.dev', img: "https://aitji.is-a.dev/img/favicon.ico" },
         ]
 
         this.rpcData = null
@@ -37,6 +37,7 @@ class DiscordDashboard {
         this.renderGames()
         this.createWaveform()
         this.setupAudioControls()
+        this.setupVCModal()
         this.startDiscordRPCFetching()
         this.renderSkeletonRPC()
     }
@@ -160,6 +161,9 @@ class DiscordDashboard {
         gamesGrid.innerHTML = ''
 
         this.games.forEach(game => {
+            const container = document.createElement('div')
+            container.style.position = 'relative'
+
             const a = document.createElement('a')
             a.className = 'game-icon'
 
@@ -188,8 +192,168 @@ class DiscordDashboard {
                 a.textContent = game.name
             }
 
-            gamesGrid.appendChild(a)
+            const tooltip = document.createElement('div')
+            tooltip.className = 'tooltip'
+            tooltip.textContent = game.name
+
+            // add tooltip arrow
+            const arrow = document.createElement('div')
+            tooltip.appendChild(arrow)
+
+            container.appendChild(a)
+            container.appendChild(tooltip)
+
+            // show/hide tooltip on hover
+            container.addEventListener('mouseenter', () => {
+                tooltip.style.opacity = '1'
+                tooltip.style.visibility = 'visible'
+            })
+
+            container.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0'
+                tooltip.style.visibility = 'hidden'
+            })
+
+            gamesGrid.appendChild(container)
         })
+    }
+
+    renderVCDisplay() {
+        const vcDisplay = document.getElementById('vcDisplay')
+
+        if (!vcDisplay) return
+        vcDisplay.innerHTML = ''
+
+        // user in vc?
+        if (!this.rpcData || !this.rpcData.vc_channel || !this.rpcData.vc_channel.members) {
+            vcDisplay.style.display = 'none'
+            return
+        }
+
+        vcDisplay.style.display = 'flex'
+        const members = this.rpcData.vc_channel.members
+        const maxVisible = 5
+
+        // show up to 5 members
+        const visibleMembers = members.slice(0, maxVisible)
+
+        visibleMembers.forEach(member => {
+            const memberEl = document.createElement('div')
+            memberEl.className = 'vc-member'
+
+            const avatar = document.createElement('img')
+            avatar.className = 'vc-avatar'
+            avatar.src = member.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'
+            avatar.alt = member.display_name
+            avatar.onerror = () => avatar.src = 'https://cdn.discordapp.com/embed/avatars/0.png'
+
+            const tooltip = document.createElement('div')
+            tooltip.className = 'tooltip'
+            tooltip.textContent = member.display_name
+
+            memberEl.appendChild(avatar)
+            memberEl.appendChild(tooltip)
+            memberEl.onclick = () => this.showVCModal()
+            vcDisplay.appendChild(memberEl)
+        })
+
+        // overflow indicator if more than 5 members
+        if (members.length > maxVisible) {
+            const container = document.createElement('div')
+            container.className = 'vc-member'
+
+            const overflowEl = document.createElement('div')
+            overflowEl.className = 'vc-overflow'
+            overflowEl.textContent = `+${members.length - maxVisible}`
+            overflowEl.onclick = () => this.showVCModal()
+
+            const tooltip = document.createElement('div')
+            tooltip.className = 'tooltip'
+            tooltip.textContent = 'View all members'
+
+            container.appendChild(overflowEl)
+            container.appendChild(tooltip)
+            vcDisplay.appendChild(container)
+        }
+    }
+
+    setupVCModal() {
+        const modal = document.getElementById('vcModal')
+        const closeBtn = document.getElementById('modalClose')
+
+        if (closeBtn) closeBtn.onclick = () => this.hideVCModal()
+
+        if (modal) {
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    this.hideVCModal()
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case "Escape": this.hideVCModal(); break
+                case "Spacebar": this.hideVCModal(); break
+                case "Enter": this.hideVCModal(); break
+                case "Backspace": this.hideVCModal(); break
+                default: break
+            }
+        })
+    }
+
+    showVCModal() {
+        const modal = document.getElementById('vcModal')
+        const guildInfo = document.getElementById('guildInfo')
+        const memberList = document.getElementById('memberList')
+
+        if (!modal || !this.rpcData || !this.rpcData.vc_channel) return
+        if (guildInfo) guildInfo.innerHTML = `${this.rpcData.vc_channel.guild}<br><strong>${this.rpcData.vc_channel.channel}</strong>`
+
+        // populate member list
+        if (memberList) {
+            memberList.innerHTML = ''
+
+            this.rpcData.vc_channel.members.forEach(member => {
+                const memberItem = document.createElement('div')
+                memberItem.className = 'member-item'
+
+                const avatar = document.createElement('img')
+                avatar.className = 'member-avatar'
+                avatar.src = member.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'
+                avatar.alt = member.display_name
+                avatar.onerror = () => avatar.src = 'https://cdn.discordapp.com/embed/avatars/0.png'
+
+                const memberInfo = document.createElement('div')
+                memberInfo.className = 'member-info'
+
+                const memberName = document.createElement('div')
+                memberName.className = 'member-name'
+                memberName.textContent = member.display_name
+
+                const memberUsername = document.createElement('div')
+                memberUsername.className = 'member-username'
+                memberUsername.textContent = member.name
+
+                memberInfo.appendChild(memberName)
+                memberInfo.appendChild(memberUsername)
+                memberItem.appendChild(avatar)
+                memberItem.appendChild(memberInfo)
+
+                memberList.appendChild(memberItem)
+            })
+        }
+
+        modal.classList.add('show')
+        document.body.style.overflow = 'hidden'
+    }
+
+    hideVCModal() {
+        const modal = document.getElementById('vcModal')
+        if (modal) {
+            modal.classList.remove('show')
+            document.body.style.overflow = ''
+        }
     }
 
     // waveform creation and analysis
@@ -555,6 +719,7 @@ class DiscordDashboard {
 
                 this.rpcData = data
                 this.renderRPC()
+                this.renderVCDisplay()
 
                 // start live updates after rendering
                 this.startRPCLiveUpdates()
