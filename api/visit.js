@@ -12,9 +12,14 @@ const db = admin.firestore()
 
 let cache = { count: 0, lastVisit: null, timestamp: 0 }
 const CACHE_DURATION = 60 * 1000
+const COOLDOWN = 15 * 1000
+let ipCooldown = new Map()
 
 export default async function handler(req, res) {
     const now = Date.now()
+    res.setHeader('Cache-Control', 'public, max-age=15')
+
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
 
     if (req.method === 'GET') {
         if (now - cache.timestamp < CACHE_DURATION) return res.status(200).json(cache)
@@ -26,6 +31,13 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
+        if (ip && ipCooldown.has(ip)) {
+            const last = ipCooldown.get(ip)
+            if (now - last < COOLDOWN) return res.status(200).json(cache)
+        }
+
+        ipCooldown.set(ip, now)
+
         const docRef = db.collection('counters').doc('visitors')
         await docRef.update({
             count: admin.firestore.FieldValue.increment(1),

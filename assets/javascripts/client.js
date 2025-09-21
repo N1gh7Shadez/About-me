@@ -922,12 +922,37 @@ const initDashboard = () => {
 
     const gamesGrid = document.getElementById('gamesGrid')
     new InfiniteScroll(gamesGrid)
+
+    setInterval(getCount, 16000)
+        ; (async () => addVisit())()
+
     return dashboard
 }
 
 const preventDrag = el => {
     el.draggable = false
     el.ondragstart = () => false
+}
+
+const visit = document.getElementById('followerCount')
+const api = 'https://n1gh7shadez.vercel.app/api/visit'
+const countEl = document.getElementById('count')
+const btn = document.getElementById('visitBtn')
+
+// GET
+async function getCount() {
+    const res = await fetch(api)
+    const data = await res.json()
+
+    countEl.textContent = `${data.count}`
+}
+
+// POST
+async function addVisit() {
+    const res = await fetch(api, { method: 'POST' })
+    const data = await res.json()
+
+    countEl.textContent = `${data.count}`
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDashboard)
