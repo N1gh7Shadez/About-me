@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 
 const TOKEN = process.env.DISCORD_BOT_TOKEN
-const USER_ID = "658664592209215493"
+const USER_ID = "660742557009051659"
 
 let cache = new Map()
 const CACHE_DURATION = 1 * 60 * 1000
@@ -28,6 +28,13 @@ export default async function handler(req, res) {
 
     if (cachedData && Date.now() - cachedData.timestamp < CACHE_DURATION) {
         console.log('Returning cached data')
+
+        const etag = `"${Buffer.from(JSON.stringify(cachedData.data)).toString('base64')}"`
+        res.setHeader('Cache-Control', `public, max-age=${Math.floor(CACHE_DURATION / 1000)}`)
+        res.setHeader('Expires', new Date(cachedData.timestamp + CACHE_DURATION).toUTCString())
+        res.setHeader('ETag', etag)
+
+        if (req.headers['if-none-match'] === etag) return res.status(304).end()
         return res.status(200).json({
             ...cachedData.data,
             cached: true,
@@ -46,8 +53,7 @@ export default async function handler(req, res) {
 
     try {
         await client.login(TOKEN)
-
-        await new Promise((resolve) => { client.once('ready', resolve) })
+        await new Promise(resolve => client.once('ready', resolve))
 
         let member = null
         let vc_info = null
@@ -139,6 +145,15 @@ export default async function handler(req, res) {
         }
 
         await client.destroy()
+
+        const etag = `"${Buffer.from(JSON.stringify(data)).toString('base64')}"`
+        res.setHeader('Cache-Control', `public, max-age=${Math.floor(CACHE_DURATION / 1000)}`)
+        res.setHeader('Expires', new Date(Date.now() + CACHE_DURATION).toUTCString())
+        res.setHeader('ETag', etag)
+
+        if (req.headers['if-none-match'] === etag) {
+            return res.status(304).end()
+        }
 
         return res.status(200).json(data)
 
