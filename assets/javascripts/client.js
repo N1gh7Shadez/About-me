@@ -924,10 +924,11 @@ const initDashboard = () => {
     new InfiniteScroll(gamesGrid)
 
     setInterval(getCount, 16000)
-        ; (async () => addVisit())()
 
     return dashboard
 }
+
+(async () => await addVisit())()
 
 const preventDrag = el => {
     el.draggable = false
