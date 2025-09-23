@@ -115,6 +115,14 @@ class DiscordDashboard {
             { name: 'LINE Rangers', url: '308c37e3', img: "../../assets/images/LINERangers.png" },
         ]
 
+        this.gamesIcon = {
+            // <aitji> this will get file from "assets/images/games/..."
+            // kept it lowercase for game name
+            'minecraft': 'Minecraft.png',
+            'valorant': '/Riot.png',    // <aitji> i don't have valorant icon : use file from images
+            'roblox': '../Roblox.png',
+        }
+
         this.rpcData = null
         this.fetchInterval = null
         this.cacheStartTime = null
@@ -877,7 +885,8 @@ class DiscordDashboard {
             const buttonsHtml = ''
 
             let imagesrc = activity.large_image || activity.small_image
-            if (activity.name === "Minecraft") imagesrc = "../../assets/images/Minecraft.png"
+            const getIcon = this.gamesIcon[activity.name.toLowerCase()]
+            if (getIcon) imagesrc = "../../assets/images/games/" + getIcon
 
             return `
             <div class="rpc-activity" data-activity-index="${index}">
