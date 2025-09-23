@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js'
+import { gateway } from '../api/config'
 
 const TOKEN = process.env.DISCORD_BOT_TOKEN
 const USER_ID = "658664592209215493"
@@ -10,18 +11,8 @@ function udecode(text) {
     return typeof text === 'string' ? Buffer.from(text, 'utf-8').toString() : text
 }
 
-const allowedOrigins = ["https://n1gh7shadez.vercel.app"]
-
 export default async function handler(req, res) {
-    const origin = req.headers.origin || ''
-
-    if (!allowedOrigins.includes(origin)) return res.status(403).end()
-    res.setHeader('Access-Control-Allow-Origin', origin)
-    res.setHeader('Access-Control-Allow-Credentials', true)
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
-    if (req.method === 'OPTIONS') return res.status(200).end()
-
+    if (!gateway(req, res)) return
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
 
     const cacheKey = `discord-user-${USER_ID}`

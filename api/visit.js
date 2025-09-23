@@ -1,4 +1,5 @@
 import admin from 'firebase-admin'
+import { gateway } from '../api/config'
 
 if (!admin.apps.length) admin.initializeApp({
     credential: admin.credential.cert({
@@ -14,17 +15,9 @@ let cache = { count: 0, lastVisit: null, timestamp: 0 }
 const CACHE_DURATION = 60 * 1000
 const COOLDOWN = 15 * 1000
 let ipCooldown = new Map()
-const allowedOrigins = ["https://n1gh7shadez.vercel.app"]
 
 export default async function handler(req, res) {
-    const origin = req.headers.origin || ''
-
-    if (!allowedOrigins.includes(origin)) return res.status(403).end()
-    res.setHeader('Access-Control-Allow-Origin', origin)
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-    if (req.method === 'OPTIONS') return res.status(200).end()
+    if (!gateway(req, res)) return
 
     const now = Date.now()
     const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress
