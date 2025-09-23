@@ -333,6 +333,29 @@ body {
   border-color: #ff6b9d;
 }
 
+.modal-btn.cancel {
+  background: none;
+  border: 1px solid #5865f2;
+}
+
+.modal-btn.cancel:hover {
+  background: rgba(88, 101, 242, 0.2);
+}
+
+.modal-body {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .guild-info {
   text-align: center;
   margin-bottom: 20px;

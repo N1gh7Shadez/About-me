@@ -50,6 +50,54 @@ const showModal = (text) => {
     ta.select()
 }
 
+/**
+ * show confrim modal
+ * @param {string} msg @param {Function} onYes
+ */
+const showConfirm = (msg, onYes) => {
+    const overlay = document.createElement('div')
+    overlay.className = 'modal-overlay show'
+
+    const box = document.createElement('div')
+    box.className = 'modal-content'
+
+    const header = document.createElement('div')
+    header.className = 'modal-header'
+    const title = document.createElement('div')
+    title.className = 'modal-title'
+    title.textContent = 'Confirm Leave?'
+    const close = document.createElement('button')
+    close.className = 'modal-close'
+    close.innerHTML = '&times;'
+    close.onclick = () => overlay.remove()
+    header.append(title, close)
+
+    const body = document.createElement('div')
+    body.className = 'modal-body'
+    body.textContent = msg
+
+    const btns = document.createElement('div')
+    btns.className = 'modal-buttons'
+
+    const yes = document.createElement('button')
+    yes.className = 'modal-btn'
+    yes.textContent = 'Continue'
+    yes.onclick = () => {
+        overlay.remove()
+        onYes()
+    }
+
+    const no = document.createElement('button')
+    no.className = 'modal-btn cancel'
+    no.textContent = 'Cancel'
+    no.onclick = () => overlay.remove()
+
+    btns.append(no, yes)
+    box.append(header, body, btns)
+    overlay.appendChild(box)
+    document.body.appendChild(overlay)
+}
+
 class DiscordDashboard {
     constructor() {
         this.games = [
@@ -225,8 +273,9 @@ class DiscordDashboard {
             a.title = game.name
 
             if (game.url.startsWith('http')) {
-                a.href = game.url
-                a.target = '_blank'
+                a.href = "#"
+                // a.target = '_blank'
+                a.setAttribute('href-to', game.url)
             } else {
                 // treat as copy-text
                 a.href = '#'
@@ -1028,14 +1077,24 @@ document.addEventListener('click', async e => {
     /** @type {HTMLElement} */
     const a = e.target.closest('a')
     if (!a || a.className !== 'game-icon') return
+
     const copy = a.getAttribute('data-copy')
-    if (!copy) return
-    e.preventDefault()
-    try {
-        throwe
-        await navigator.clipboard.writeText(copy)
-        showToast('Copied!')
-    } catch {
-        showModal(copy)
+    if (copy) {
+        e.preventDefault()
+        try {
+            await navigator.clipboard.writeText(copy)
+            showToast('Copied!')
+        } catch {
+            showModal(copy)
+        }
+    } else {
+        const hrefTo = a.getAttribute('href-to')
+        if (!hrefTo) return
+
+        e.preventDefault()
+        showConfirm(`You are going to: ${hrefTo}`, () => {
+            try { window.open(hrefTo, '_blank') }
+            catch { window.location.href = hrefTo }
+        })
     }
 })
