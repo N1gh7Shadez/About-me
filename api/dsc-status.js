@@ -17,25 +17,30 @@ export default async function handler(req, res) {
 
     if (!allowedOrigins.includes(origin)) return res.status(403).end()
     res.setHeader('Access-Control-Allow-Origin', origin)
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
     if (req.method === 'OPTIONS') return res.status(200).end()
 
-    if (req.method === 'OPTIONS') return res.status(200).end()
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
 
     const cacheKey = `discord-user-${USER_ID}`
     const cachedData = cache.get(cacheKey)
 
     if (cachedData && Date.now() - cachedData.timestamp < CACHE_DURATION) {
+        console.log('Returning cached data')
 
         const etag = `"${Buffer.from(JSON.stringify(cachedData.data)).toString('base64')}"`
         res.setHeader('Cache-Control', `public, max-age=${Math.floor(CACHE_DURATION / 1000)}`)
         res.setHeader('Expires', new Date(cachedData.timestamp + CACHE_DURATION).toUTCString())
         res.setHeader('ETag', etag)
+
         if (req.headers['if-none-match'] === etag) return res.status(304).end()
-        return res.status(200).json({ ...cachedData.data, cached: true, cache_age: Math.floor((Date.now() - cachedData.timestamp) / 1000) })
+        return res.status(200).json({
+            ...cachedData.data,
+            cached: true,
+            cache_age: Math.floor((Date.now() - cachedData.timestamp) / 1000)
+        })
     }
 
     const client = new Client({
@@ -57,32 +62,61 @@ export default async function handler(req, res) {
         for (const guild of client.guilds.cache.values()) {
             try {
                 member = await guild.members.fetch(USER_ID).catch(() => null)
-                if (member && member.voice?.channel) {
-                    const vc = member.voice.channel
 
-                    const vcMembers = Array.from(vc.members.values()).map(m => ({
-                        name: udecode(m.user.username),
-                        display_name: udecode(m.displayName),
-                        avatar: m.displayAvatarURL() || "null"
-                    }))
-                    vc_info = { guild: udecode(guild.name), guild_id: guild.id, channel: udecode(vc.name), channel_id: vc.id, members: vcMembers }
+                if (member && member.voice && member.voice.channel) {
+                    const vc = member.voice.channel
+                    const vcMembers = []
+
+                    for (const vcMember of vc.members.values()) {
+                        vcMembers.push({
+                            name: udecode(vcMember.user.username),
+                            display_name: udecode(vcMember.displayName),
+                            avatar: vcMember.displayAvatarURL() || "null"
+                        })
+                    }
+
+                    vc_info = {
+                        guild: udecode(guild.name),
+                        guild_id: guild.id,
+                        channel: udecode(vc.name),
+                        channel_id: vc.id,
+                        members: vcMembers
+                    }
                     break
                 }
-            } catch { continue }
+            } catch (error) {
+                console.error(`Error fetching member from guild ${guild.name}:`, error)
+                continue
+            }
         }
 
         const activities_data = []
-        if (member?.presence) {
+        if (member && member.presence) {
             for (const activity of member.presence.activities) {
-                let buttons = activity.buttons?.map(b => ({ label: b.label || "null", url: b.url || "null" })) || "null"
+                let img_large = null
+                let img_small = null
+
+                if (activity.assets) {
+                    img_large = activity.assets.largeImageURL()
+                    img_small = activity.assets.smallImageURL()
+                }
+
+                let buttons = null
+                if (activity.buttons && activity.buttons.length > 0) {
+                    buttons = activity.buttons.map(button => ({
+                        label: button.label || "null",
+                        url: button.url || "null"
+                    }))
+                }
+
                 activities_data.push({
                     name: udecode(activity.name),
                     type: activity.type.toString(),
                     details: activity.details || null,
                     state: activity.state || null,
-                    large_image: activity.assets?.largeImageURL() || "null",
-                    small_image: activity.assets?.smallImageURL() || "null",
-                    buttons,
+                    large_image: img_large || "null",
+                    small_image: img_small || "null",
+                    buttons: buttons || "null",
                     timestamps: {
                         start: activity.timestamps?.start ? new Date(activity.timestamps.start).toISOString() : "null",
                         end: activity.timestamps?.end ? new Date(activity.timestamps.end).toISOString() : "null"
@@ -94,27 +128,45 @@ export default async function handler(req, res) {
         const data = {
             user_id: USER_ID,
             name: member ? udecode(member.user.globalName) : "n1gh7shadez",
-            avatar: member?.displayAvatarURL() || "null",
-            status: member?.presence?.status || "null",
+            avatar: member && member.displayAvatarURL() ? member.displayAvatarURL() : "null",
+            status: member && member.presence ? member.presence.status : "null",
             vc_channel: vc_info || "null",
             activities: activities_data,
             cached: false,
             timestamp: new Date().toISOString()
         }
 
-        cache.set(cacheKey, { data, timestamp: Date.now() })
-        if (cache.size > 100) cache.delete(cache.keys().next().value)
+        cache.set(cacheKey, {
+            data: data,
+            timestamp: Date.now()
+        })
+
+        if (cache.size > 100) {
+            const oldestKey = cache.keys().next().value
+            cache.delete(oldestKey)
+        }
+
+        await client.destroy()
 
         const etag = `"${Buffer.from(JSON.stringify(data)).toString('base64')}"`
         res.setHeader('Cache-Control', `public, max-age=${Math.floor(CACHE_DURATION / 1000)}`)
         res.setHeader('Expires', new Date(Date.now() + CACHE_DURATION).toUTCString())
         res.setHeader('ETag', etag)
-        if (req.headers['if-none-match'] === etag) return res.status(304).end()
-        await client.destroy()
+
+        if (req.headers['if-none-match'] === etag) {
+            return res.status(304).end()
+        }
+
         return res.status(200).json(data)
+
     } catch (error) {
-        console.error(error)
-        await client.destroy().catch(() => { })
-        return res.status(500).json({ error: 'Failed to fetch Discord user data', message: error.message })
+        console.error('Error:', error)
+        try { await client.destroy() }
+        catch (destroyError) { console.error('Error destroying client:', destroyError) }
+
+        return res.status(500).json({
+            error: 'Failed to fetch Discord user data',
+            message: error.message
+        })
     }
 }
