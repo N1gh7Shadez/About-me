@@ -10,9 +10,19 @@ function udecode(text) {
     return typeof text === 'string' ? Buffer.from(text, 'utf-8').toString() : text
 }
 
+const allowedOrigin = "https://n1gh7shadez.vercel.app"
+
 export default async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Credentials', true)
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    const origin = req.headers.origin || ''
+
+    if (origin === allowedOrigin) {
+        res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+        res.setHeader('Access-Control-Allow-Credentials', 'true')
+    } else {
+        res.setHeader('Access-Control-Allow-Origin', 'null')
+        return res.status(403).json({ error: 'forbidden' })
+    }
+
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
     res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
 
@@ -126,7 +136,7 @@ export default async function handler(req, res) {
 
         const data = {
             user_id: USER_ID,
-            name: member ? udecode(member.user.globalName) : "n1gh7shadez", 
+            name: member ? udecode(member.user.globalName) : "n1gh7shadez",
             avatar: member && member.displayAvatarURL() ? member.displayAvatarURL() : "null",
             status: member && member.presence ? member.presence.status : "null",
             vc_channel: vc_info || "null",

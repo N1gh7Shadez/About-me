@@ -16,10 +16,28 @@ const COOLDOWN = 15 * 1000
 let ipCooldown = new Map()
 
 export default async function handler(req, res) {
-    const now = Date.now()
+    const origin = req.headers.origin || ''
+    const allowedOrigin = "https://n1gh7shadez.vercel.app"
+
+    if (req.method === 'OPTIONS') {
+        if (origin === allowedOrigin) {
+            res.setHeader('Access-Control-Allow-Origin', origin)
+            res.setHeader('Access-Control-Allow-Credentials', 'true')
+            res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+            return res.status(200).end()
+        }
+        return res.status(403).end()
+    }
+
+    if (origin !== allowedOrigin) return res.status(403).end()
+
+    res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
     res.setHeader('Cache-Control', 'public, max-age=15')
 
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    const now = Date.now()
+    const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress
 
     if (req.method === 'GET') {
         if (now - cache.timestamp < CACHE_DURATION) return res.status(200).json(cache)
