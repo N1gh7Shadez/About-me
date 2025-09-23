@@ -1,5 +1,4 @@
 import admin from 'firebase-admin'
-import { gateway } from '../api/config'
 
 if (!admin.apps.length) admin.initializeApp({
     credential: admin.credential.cert({
@@ -17,30 +16,38 @@ const COOLDOWN = 15 * 1000
 let ipCooldown = new Map()
 
 export default async function handler(req, res) {
-    if (!await gateway(req, res)) return
-
     const now = Date.now()
-    const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress
+    res.setHeader('Cache-Control', 'public, max-age=15')
+
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
 
     if (req.method === 'GET') {
         if (now - cache.timestamp < CACHE_DURATION) return res.status(200).json(cache)
 
         const doc = await db.collection('counters').doc('visitors').get()
-        cache = { ...(doc.exists ? doc.data() : { count: 0, lastVisit: null }), timestamp: now }
+        const data = doc.exists ? doc.data() : { count: 0, lastVisit: null }
+        cache = { ...data, timestamp: now }
         return res.status(200).json(cache)
     }
 
     if (req.method === 'POST') {
+        if (ip && ipCooldown.has(ip)) {
+            const last = ipCooldown.get(ip)
+            if (now - last < COOLDOWN) return res.status(200).json(cache)
+        }
 
-        if (ipCooldown.has(ip) && now - ipCooldown.get(ip) < COOLDOWN) return res.status(200).json(cache)
         ipCooldown.set(ip, now)
 
         const docRef = db.collection('counters').doc('visitors')
+        await docRef.update({
+            count: admin.firestore.FieldValue.increment(1),
+            lastVisit: admin.firestore.FieldValue.serverTimestamp()
+        })
 
-        await docRef.update({ count: admin.firestore.FieldValue.increment(1), lastVisit: admin.firestore.FieldValue.serverTimestamp() })
         const doc = await docRef.get()
+        const data = doc.data()
+        cache = { ...data, timestamp: now }
 
-        cache = { ...doc.data(), timestamp: now }
         return res.status(200).json(cache)
     }
 
