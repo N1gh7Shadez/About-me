@@ -17,7 +17,7 @@ const COOLDOWN = 15 * 1000
 let ipCooldown = new Map()
 
 export default async function handler(req, res) {
-    if (!gateway(req, res)) return
+    if (!await gateway(req, res)) return
 
     const now = Date.now()
     const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress

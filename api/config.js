@@ -20,7 +20,7 @@ const ALLOWED_HEADERS = [
     'X-Api-Version'
 ]
 
-export const gateway = (req, res) => {
+export const gateway = async (req, res) => {
     const origin = req.headers.origin || req.headers.referer
 
     if (typeof origin === 'string' && OG_DOMAIN.includes(origin)) { // <aitji> if testing change this to ALLOWED_ORIGINS

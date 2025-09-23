@@ -12,7 +12,7 @@ function udecode(text) {
 }
 
 export default async function handler(req, res) {
-    if (!gateway(req, res)) return
+    if (!await gateway(req, res)) return
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
 
     const cacheKey = `discord-user-${USER_ID}`
