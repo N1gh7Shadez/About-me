@@ -1,3 +1,55 @@
+/**
+ * show bottom toast
+ * @param {string} msg 
+ */
+const showToast = (msg) => {
+    const t = document.createElement('div')
+    t.className = 'toast'
+    t.textContent = msg
+    document.body.appendChild(t)
+    requestAnimationFrame(() => t.classList.add('show'))
+    setTimeout(() => {
+        t.classList.remove('show')
+        setTimeout(() => t.remove(), 300)
+    }, 2000)
+}
+
+/**
+ * copy textarea modal
+ * @param {string} text 
+ */
+const showModal = (text) => {
+    const overlay = document.createElement('div')
+    overlay.className = 'modal-overlay show'
+    const box = document.createElement('div')
+    box.className = 'modal-content'
+
+    const header = document.createElement('div')
+    header.className = 'modal-header'
+    const title = document.createElement('div')
+    title.className = 'modal-title'
+    title.textContent = 'Copy Manually'
+    const close = document.createElement('button')
+    close.className = 'modal-close'
+    close.innerHTML = '&times;'
+    close.onclick = () => overlay.remove()
+    header.append(title, close)
+
+    const ta = document.createElement('textarea')
+    ta.className = 'modal-textarea'
+    ta.value = text
+
+    const btn = document.createElement('button')
+    btn.className = 'modal-btn'
+    btn.textContent = 'Close'
+    btn.onclick = () => overlay.remove()
+
+    box.append(header, ta, btn)
+    overlay.appendChild(box)
+    document.body.appendChild(overlay)
+    ta.select()
+}
+
 class DiscordDashboard {
     constructor() {
         this.games = [
@@ -178,11 +230,7 @@ class DiscordDashboard {
             } else {
                 // treat as copy-text
                 a.href = '#'
-                a.addEventListener('click', e => {
-                    e.preventDefault()
-                    navigator.clipboard.writeText(game.url)
-                    alert(`Copied: "${game.url}"`)
-                })
+                a.setAttribute('data-copy', game.url)
             }
 
             if (game.img) {
@@ -975,3 +1023,19 @@ new MutationObserver(mutations => {
         })
     })
 }).observe(document.body, { childList: true, subtree: true })
+
+document.addEventListener('click', async e => {
+    /** @type {HTMLElement} */
+    const a = e.target.closest('a')
+    if (!a || a.className !== 'game-icon') return
+    const copy = a.getAttribute('data-copy')
+    if (!copy) return
+    e.preventDefault()
+    try {
+        throwe
+        await navigator.clipboard.writeText(copy)
+        showToast('Copied!')
+    } catch {
+        showModal(copy)
+    }
+})
