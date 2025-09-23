@@ -50,6 +50,18 @@ const showModal = (text) => {
     ta.select()
 }
 
+/** @parm {number} n */
+function formatInt(n = 0) {
+    n = Number(n) || 0
+    if (n < 1e3) return /**/n
+    if (n < 1e4) return /**/(n / 1e3).toFixed(1) + 'K'   // 1.2K
+    if (n < 1e5) return /* */Math.floor(n / 1e3) + 'K'   // 12K
+    if (n < 1e6) return /* */Math.floor(n / 1e3) + 'K'   // 123K
+    if (n < 1e7) return /**/(n / 1e6).toFixed(1) + 'M'   // 1.2M
+    if (n < 1e8) return /* */Math.floor(n / 1e6) + 'M'   // 12M
+    return Math.floor(n / 1e6) + 'M'                     // 123M+
+}
+
 /**
  * show confrim modal
  * @param {string} msg @param {Function} onYes
@@ -1027,7 +1039,7 @@ async function getCount() {
     if (!countEl) return
     const res = await fetch('https://n1gh7shadez.vercel.app/api/visit')
     const data = await res.json()
-    countEl.textContent = `${data.count}`
+    countEl.textContent = `${formatInt(data.count)}`
     localStorage.setItem('last-count', data.count)
 }
 
@@ -1036,7 +1048,7 @@ async function addVisit() {
     if (!countEl) return
     const res = await fetch('https://n1gh7shadez.vercel.app/api/visit', { method: 'POST' })
     const data = await res.json()
-    countEl.textContent = `${data.count}`
+    countEl.textContent = `${formatInt(data.count)}`
     localStorage.setItem('last-count', data.count)
 }
 
@@ -1061,7 +1073,7 @@ const initDashboard = () => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    countEl.textContent = localStorage.getItem('last-count') || '0'
+    countEl.textContent = formatInt(localStorage.getItem('last-count') || '0')
 
     initDashboard()
     afterDOM()
