@@ -15,16 +15,12 @@ const allowedOrigins = ["https://n1gh7shadez.vercel.app"]
 export default async function handler(req, res) {
     const origin = req.headers.origin || ''
 
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin)
-        res.setHeader('Access-Control-Allow-Credentials', 'true')
-    } else {
-        res.setHeader('Access-Control-Allow-Origin', 'null')
-        return res.status(403).json({ error: 'forbidden' })
-    }
-
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS')
+    if (!allowedOrigins.includes(origin)) return res.status(403).end()
+    res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    if (req.method === 'OPTIONS') return res.status(200).end()
 
     if (req.method === 'OPTIONS') return res.status(200).end()
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
