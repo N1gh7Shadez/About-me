@@ -113,7 +113,6 @@ const showConfirm = (msg, onYes) => {
 class DiscordDashboard {
     constructor() {
         this.games = [
-            // add more game this is place holder
             { name: 'Youtube', url: 'https://www.youtube.com/@n1ghtshadez?sub_confirmation=1', img: "../../assets/images/Youtube.png" },
             { name: 'Facebook', url: 'https://www.facebook.com/N1gh7Shadez', img: "../../assets/images/Facebook.png" },
             { name: 'Instagram', url: 'https://www.instagram.com/_n1ghtshade_/profilecard', img: "../../assets/images/Instagram.png" },
@@ -134,6 +133,7 @@ class DiscordDashboard {
             'valorant': 'Valorant.png',    // <aitji> i don't have valorant icon : use file from images
             'roblox': '../Roblox.png',
             'hollow knight: silksong': 'HollowKnight.png',
+            'google play games': 'Google Play Game.png',
         }
 
         this.rpcData = null
