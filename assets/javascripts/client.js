@@ -627,7 +627,7 @@ class DiscordDashboard {
         if (!audio || !playButton) return
 
         let isPlaying = false
-        audio.volume = 0.05
+        audio.volume = 0.2
         playButton.innerHTML = '<i class="fas fa-play"></i>'
 
         playButton.addEventListener('click', async () => {
