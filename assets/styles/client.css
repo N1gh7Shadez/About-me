@@ -5,8 +5,8 @@
 }
 
 body {
-  font-family: Cursive, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Fantasy, sans-serif;
+  font-family: Cursive, -apple-system, Fantasy, "Segoe UI",
+    Roboto, sans-serif;
   background: #0a0e1a;
   color: #ffffff;
   overflow-x: hidden;
