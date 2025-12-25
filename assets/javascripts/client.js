@@ -123,7 +123,6 @@ class DiscordDashboard {
             { name: 'Roblox', url: 'https://www.roblox.com/users/1207490727/profile', img: "../../assets/images/Roblox.png" },
             { name: 'Riot', url: 'N1gh7Shadez#17250', img: "../../assets/images/Riot.png" },
             { name: 'RoV', url: 'N1gh7Shadez', img: "../../assets/images/RoV.png" },
-            { name: 'LINE Rangers', url: '308c37e3', img: "../../assets/images/LINERangers.png" },
         ]
 
         this.gamesIcon = {
