@@ -157,124 +157,12 @@ class DiscordDashboard {
     }
 
     init() {
-        this.setupVideoBackground()
         this.renderGames()
         this.createWaveform()
         this.setupAudioControls()
         this.setupVCModal()
         this.startDiscordRPCFetching()
         this.renderSkeletonRPC()
-    }
-
-    // video bg setup
-    setupVideoBackground() {
-        const video = document.querySelector('.video-background')
-        if (!video) return
-
-        this.loadVideo(0)
-            .then(({ src }) => {
-                video.src = src
-                video.load()
-
-                const handleReady = () => {
-                    video.removeEventListener('canplaythrough', handleReady)
-                    video.play().then(() => {
-                        video.classList.add('loaded')
-                    }).catch(() => {
-                        video.classList.add('loaded')
-                    })
-                }
-
-                if (video.readyState >= 3) {
-                    handleReady()
-                } else {
-                    video.addEventListener('canplaythrough', handleReady, { once: true })
-                }
-
-                this.upgradeVideoQuality(video, 1)
-            })
-            .catch(() => {
-                video.style.display = 'none'
-            })
-    }
-
-    loadVideo(index) {
-        return new Promise((resolve, reject) => {
-            if (index >= this.videoSources.length) {
-                reject(new Error('no more video sources'))
-                return
-            }
-
-            const testVideo = document.createElement('video')
-            testVideo.preload = 'auto'
-            testVideo.muted = true
-
-            const handleSuccess = () => {
-                testVideo.removeEventListener('canplaythrough', handleSuccess)
-                testVideo.removeEventListener('error', handleError)
-                resolve({ src: this.videoSources[index] })
-            }
-
-            const handleError = () => {
-                testVideo.removeEventListener('canplaythrough', handleSuccess)
-                testVideo.removeEventListener('error', handleError)
-                this.loadVideo(index + 1).then(resolve).catch(reject)
-            }
-
-            testVideo.addEventListener('canplaythrough', handleSuccess, { once: true })
-            testVideo.addEventListener('error', handleError, { once: true })
-            testVideo.src = this.videoSources[index]
-            testVideo.load()
-        })
-    }
-
-    upgradeVideoQuality(mainVideo, startIndex) {
-        if (startIndex >= this.videoSources.length) return
-
-        setTimeout(() => {
-            this.tryVideoUpgrade(mainVideo, startIndex)
-        }, 3000)
-    }
-
-    tryVideoUpgrade(mainVideo, index) {
-        if (index >= this.videoSources.length) return
-
-        const upgradeVideo = document.createElement('video')
-        upgradeVideo.preload = 'auto'
-        upgradeVideo.muted = true
-        upgradeVideo.loop = true
-        upgradeVideo.playsInline = true
-        upgradeVideo.style.display = 'none'
-        document.body.appendChild(upgradeVideo)
-
-        const handleReady = () => {
-            upgradeVideo.currentTime = mainVideo.currentTime
-            upgradeVideo.play().then(() => {
-                mainVideo.src = this.videoSources[index]
-                mainVideo.load()
-
-                const handleMainReady = () => {
-                    mainVideo.currentTime = upgradeVideo.currentTime
-                    mainVideo.play().then(() => {
-                        upgradeVideo.remove()
-                        this.upgradeVideoQuality(mainVideo, index + 1)
-                    })
-                }
-                mainVideo.addEventListener('canplaythrough', handleMainReady, { once: true })
-            }).catch(() => {
-                upgradeVideo.remove()
-                this.tryVideoUpgrade(mainVideo, index + 1)
-            })
-        }
-
-        upgradeVideo.addEventListener('canplaythrough', handleReady, { once: true })
-        upgradeVideo.addEventListener('error', () => {
-            upgradeVideo.remove()
-            this.tryVideoUpgrade(mainVideo, index + 1)
-        }, { once: true })
-
-        upgradeVideo.src = this.videoSources[index]
-        upgradeVideo.load()
     }
 
     // games grid rendering

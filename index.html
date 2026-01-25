@@ -23,8 +23,10 @@
 </head>
 
 <body>
-    <video class="video-background" autoplay muted loop playsinline>
-        <source src="assets/videos/wpp-mobile.mp4" type="video/mp4">
+    <video class="video-background" autoplay muted loop playsinline preload="auto">
+        <source src="/assets/videos/wpp-mobile.mp4" type="video/mp4">
+        <source src="/assets/videos/wpp-ios.mp4" type="video/mp4">
+        <source src="/assets/videos/wpp.mp4" type="video/mp4">
     </video>
     <div class="overlay"></div>
 
@@ -46,7 +48,9 @@
             </div>
         </header>
         <hr class="hidden-pc">
-        <div class="games-grid-wrapper"><div class="games-grid" id="gamesGrid"></div></div>
+        <div class="games-grid-wrapper">
+            <div class="games-grid" id="gamesGrid"></div>
+        </div>
         <div class="discord-rpc" id="discordRPC"></div>
 
         <div class="spotify-section">
@@ -79,7 +83,7 @@
             </div>
         </div>
 
-        <audio id="favAudio" preload="metadata">
+        <audio id="favAudio" preload="auto">
             <source src="./assets/audios/favsong.mp3" id="fav-source" type="audio/mpeg">
         </audio>
 
