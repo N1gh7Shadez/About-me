@@ -728,19 +728,50 @@ class DiscordDashboard {
         if (!rpcContainer) return
         if (statusDot) statusDot.className = `status-dot ${this.rpcData.status || 'offline'}`
 
-        const activities = this.rpcData.activities || []
-        if (!activities.length) {
+        const rawActivities = this.rpcData.activities || []
+        if (!rawActivities.length) {
             rpcContainer.innerHTML = ''
             rpcContainer.style.display = 'none'
             this.stopRPCLiveUpdates()
             return
         } else rpcContainer.style.display = 'block'
 
+        const picked = new Map()
+
+        rawActivities.forEach((activity, index) => {
+            const nameKey = (activity.name || '').toLowerCase()
+            if (!nameKey) return
+
+            const hasImage =
+                (activity.large_image && activity.large_image !== 'null') ||
+                (activity.small_image && activity.small_image !== 'null')
+
+            if (!picked.has(nameKey)) {
+                picked.set(nameKey, { activity, index, hasImage })
+                return
+            }
+
+            const prev = picked.get(nameKey)
+
+            if (!prev.hasImage && hasImage) {
+                picked.set(nameKey, { activity, index, hasImage })
+                return
+            }
+
+            if (prev.hasImage === hasImage && index < prev.index) {
+                picked.set(nameKey, { activity, index, hasImage })
+            }
+        })
+
+        const activities = [...picked.values()]
+            .sort((a, b) => a.index - b.index)
+            .map(v => v.activity)
+
         rpcContainer.innerHTML = activities.map((activity, index) => {
-            const startTime = activity.timestamps?.start && activity.timestamps.start !== "null"
+            const startTime = activity.timestamps?.start && activity.timestamps.start !== 'null'
                 ? new Date(activity.timestamps.start)
                 : null
-            const endTime = activity.timestamps?.end && activity.timestamps.end !== "null"
+            const endTime = activity.timestamps?.end && activity.timestamps.end !== 'null'
                 ? new Date(activity.timestamps.end)
                 : null
 
