@@ -795,11 +795,9 @@ class DiscordDashboard {
                     <img class="rpc-avatar" src="${this.rpcData.avatar || 'assets/images/N1s.jpg'}" alt="Discord Avatar">
                     <div>
                         <div class="activity-title">${this.rpcData.name}</div>
-                        <div class="activity-details">Status: ${this.rpcData.status || 'offline'}</div>
+                        <div class="activity-details">${activity.state || "Sleep all the time."}</div>
                     </div>
-                </div>` : ''}
-
-                <div class="rpc-content">
+                </div>` : `<div class="rpc-content">
                     ${imagesrc && imagesrc !== "null"
                     ? `<div class="activity-image"><img src="${imagesrc}" alt="Activity" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"></div>`
                     : ''}
@@ -811,8 +809,8 @@ class DiscordDashboard {
                         ${progressHtml}
                     </div>
                     ${buttonsHtml ? `<div class="buttons-section">${buttonsHtml}</div>` : ''}
-                </div>
-            </div><br>`
+                </div>`}
+            </div>`
         }).join('<hr>')
     }
 
