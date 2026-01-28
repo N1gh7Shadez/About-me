@@ -157,124 +157,12 @@ class DiscordDashboard {
     }
 
     init() {
-        this.setupVideoBackground()
         this.renderGames()
         this.createWaveform()
         this.setupAudioControls()
         this.setupVCModal()
         this.startDiscordRPCFetching()
         this.renderSkeletonRPC()
-    }
-
-    // video bg setup
-    setupVideoBackground() {
-        const video = document.querySelector('.video-background')
-        if (!video) return
-
-        this.loadVideo(0)
-            .then(({ src }) => {
-                video.src = src
-                video.load()
-
-                const handleReady = () => {
-                    video.removeEventListener('canplaythrough', handleReady)
-                    video.play().then(() => {
-                        video.classList.add('loaded')
-                    }).catch(() => {
-                        video.classList.add('loaded')
-                    })
-                }
-
-                if (video.readyState >= 3) {
-                    handleReady()
-                } else {
-                    video.addEventListener('canplaythrough', handleReady, { once: true })
-                }
-
-                this.upgradeVideoQuality(video, 1)
-            })
-            .catch(() => {
-                video.style.display = 'none'
-            })
-    }
-
-    loadVideo(index) {
-        return new Promise((resolve, reject) => {
-            if (index >= this.videoSources.length) {
-                reject(new Error('no more video sources'))
-                return
-            }
-
-            const testVideo = document.createElement('video')
-            testVideo.preload = 'auto'
-            testVideo.muted = true
-
-            const handleSuccess = () => {
-                testVideo.removeEventListener('canplaythrough', handleSuccess)
-                testVideo.removeEventListener('error', handleError)
-                resolve({ src: this.videoSources[index] })
-            }
-
-            const handleError = () => {
-                testVideo.removeEventListener('canplaythrough', handleSuccess)
-                testVideo.removeEventListener('error', handleError)
-                this.loadVideo(index + 1).then(resolve).catch(reject)
-            }
-
-            testVideo.addEventListener('canplaythrough', handleSuccess, { once: true })
-            testVideo.addEventListener('error', handleError, { once: true })
-            testVideo.src = this.videoSources[index]
-            testVideo.load()
-        })
-    }
-
-    upgradeVideoQuality(mainVideo, startIndex) {
-        if (startIndex >= this.videoSources.length) return
-
-        setTimeout(() => {
-            this.tryVideoUpgrade(mainVideo, startIndex)
-        }, 3000)
-    }
-
-    tryVideoUpgrade(mainVideo, index) {
-        if (index >= this.videoSources.length) return
-
-        const upgradeVideo = document.createElement('video')
-        upgradeVideo.preload = 'auto'
-        upgradeVideo.muted = true
-        upgradeVideo.loop = true
-        upgradeVideo.playsInline = true
-        upgradeVideo.style.display = 'none'
-        document.body.appendChild(upgradeVideo)
-
-        const handleReady = () => {
-            upgradeVideo.currentTime = mainVideo.currentTime
-            upgradeVideo.play().then(() => {
-                mainVideo.src = this.videoSources[index]
-                mainVideo.load()
-
-                const handleMainReady = () => {
-                    mainVideo.currentTime = upgradeVideo.currentTime
-                    mainVideo.play().then(() => {
-                        upgradeVideo.remove()
-                        this.upgradeVideoQuality(mainVideo, index + 1)
-                    })
-                }
-                mainVideo.addEventListener('canplaythrough', handleMainReady, { once: true })
-            }).catch(() => {
-                upgradeVideo.remove()
-                this.tryVideoUpgrade(mainVideo, index + 1)
-            })
-        }
-
-        upgradeVideo.addEventListener('canplaythrough', handleReady, { once: true })
-        upgradeVideo.addEventListener('error', () => {
-            upgradeVideo.remove()
-            this.tryVideoUpgrade(mainVideo, index + 1)
-        }, { once: true })
-
-        upgradeVideo.src = this.videoSources[index]
-        upgradeVideo.load()
     }
 
     // games grid rendering
@@ -840,19 +728,50 @@ class DiscordDashboard {
         if (!rpcContainer) return
         if (statusDot) statusDot.className = `status-dot ${this.rpcData.status || 'offline'}`
 
-        const activities = this.rpcData.activities || []
-        if (!activities.length) {
+        const rawActivities = this.rpcData.activities || []
+        if (!rawActivities.length) {
             rpcContainer.innerHTML = ''
             rpcContainer.style.display = 'none'
             this.stopRPCLiveUpdates()
             return
         } else rpcContainer.style.display = 'block'
 
+        const picked = new Map()
+
+        rawActivities.forEach((activity, index) => {
+            const nameKey = (activity.name || '').toLowerCase()
+            if (!nameKey) return
+
+            const hasImage =
+                (activity.large_image && activity.large_image !== 'null') ||
+                (activity.small_image && activity.small_image !== 'null')
+
+            if (!picked.has(nameKey)) {
+                picked.set(nameKey, { activity, index, hasImage })
+                return
+            }
+
+            const prev = picked.get(nameKey)
+
+            if (!prev.hasImage && hasImage) {
+                picked.set(nameKey, { activity, index, hasImage })
+                return
+            }
+
+            if (prev.hasImage === hasImage && index < prev.index) {
+                picked.set(nameKey, { activity, index, hasImage })
+            }
+        })
+
+        const activities = [...picked.values()]
+            .sort((a, b) => a.index - b.index)
+            .map(v => v.activity)
+
         rpcContainer.innerHTML = activities.map((activity, index) => {
-            const startTime = activity.timestamps?.start && activity.timestamps.start !== "null"
+            const startTime = activity.timestamps?.start && activity.timestamps.start !== 'null'
                 ? new Date(activity.timestamps.start)
                 : null
-            const endTime = activity.timestamps?.end && activity.timestamps.end !== "null"
+            const endTime = activity.timestamps?.end && activity.timestamps.end !== 'null'
                 ? new Date(activity.timestamps.end)
                 : null
 
@@ -907,11 +826,9 @@ class DiscordDashboard {
                     <img class="rpc-avatar" src="${this.rpcData.avatar || 'assets/images/N1s.jpg'}" alt="Discord Avatar">
                     <div>
                         <div class="activity-title">${this.rpcData.name}</div>
-                        <div class="activity-details">Status: ${this.rpcData.status || 'offline'}</div>
+                        <div class="activity-details">${activity.state || "Sleep all the time."}</div>
                     </div>
-                </div>` : ''}
-
-                <div class="rpc-content">
+                </div>` : `<div class="rpc-content">
                     ${imagesrc && imagesrc !== "null"
                     ? `<div class="activity-image"><img src="${imagesrc}" alt="Activity" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;"></div>`
                     : ''}
@@ -923,8 +840,8 @@ class DiscordDashboard {
                         ${progressHtml}
                     </div>
                     ${buttonsHtml ? `<div class="buttons-section">${buttonsHtml}</div>` : ''}
-                </div>
-            </div><br>`
+                </div>`}
+            </div>`
         }).join('<hr>')
     }
 
