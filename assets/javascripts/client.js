@@ -133,6 +133,7 @@ class DiscordDashboard {
             'roblox': '../Roblox.png',
             'hollow knight: silksong': 'HollowKnight.png',
             'google play games': 'Google Play Game.png',
+            'cookierun: kingdom': 'CookierunKingdom.png',
         }
 
         this.rpcData = null
