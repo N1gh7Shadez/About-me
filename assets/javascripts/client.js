@@ -122,7 +122,8 @@ class DiscordDashboard {
             { name: 'Discord', url: 'https://discord.com/invite/JZVN5h8Nqw', img: "../../assets/images/Discord.png" },
             { name: 'Roblox', url: 'https://www.roblox.com/users/1207490727/profile', img: "../../assets/images/Roblox.png" },
             { name: 'Riot', url: 'N1gh7Shadez#17250', img: "../../assets/images/Riot.png" },
-            { name: 'RoV', url: 'N1gh7Shadez', img: "../../assets/images/RoV.png" },
+            // { name: 'RoV', url: 'N1gh7Shadez', img: "../../assets/images/RoV.png" },
+            { name: 'CookieRun: Kingdom', url: 'N1ghtshadez', img: "../../assets/images/games/CookierunKingdom.png" },
         ]
 
         this.gamesIcon = {
@@ -133,6 +134,7 @@ class DiscordDashboard {
             'roblox': '../Roblox.png',
             'hollow knight: silksong': 'HollowKnight.png',
             'google play games': 'Google Play Game.png',
+            'cookierun: kingdom': 'CookierunKingdom.png',
         }
 
         this.rpcData = null
