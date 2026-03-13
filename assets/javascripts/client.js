@@ -623,8 +623,40 @@ class DiscordDashboard {
     updateRPCTimestamps() {
         if (!this.rpcData || !this.rpcData.activities) return
 
-        this.rpcData.activities.forEach((activity, index) => {
-            const activityElement = document.querySelector(`[data-activity-index="${index}"]`)
+        const rawActivities = this.rpcData.activities || []
+        const picked = new Map()
+
+        rawActivities.forEach((activity, index) => {
+            const nameKey = (activity.name || '').toLowerCase()
+            if (!nameKey) return
+
+            const hasImage =
+                (activity.large_image && activity.large_image !== 'null') ||
+                (activity.small_image && activity.small_image !== 'null')
+
+            if (!picked.has(nameKey)) {
+                picked.set(nameKey, { activity, index, hasImage })
+                return
+            }
+
+            const prev = picked.get(nameKey)
+
+            if (!prev.hasImage && hasImage) {
+                picked.set(nameKey, { activity, index, hasImage })
+                return
+            }
+
+            if (prev.hasImage === hasImage && index < prev.index) {
+                picked.set(nameKey, { activity, index, hasImage })
+            }
+        })
+
+        const activities = [...picked.values()]
+            .sort((a, b) => a.index - b.index)
+            .map(v => v.activity)
+
+        activities.forEach((activity, displayIndex) => {
+            const activityElement = document.querySelector(`[data-activity-index="${displayIndex}"]`)
             if (!activityElement) return
 
             const startTime = activity.timestamps?.start && activity.timestamps.start !== "null"
@@ -661,7 +693,7 @@ class DiscordDashboard {
                 // count up scenario - show "Playing for X time"
                 const durationText = this.formatDuration(elapsed)
 
-                if (currentTimeElement) currentTimeElement.textContent = durationText
+                if (currentTimeElement) currentTimeElement.textContent = `Playing for ${durationText}`
                 if (endTimeElement) endTimeElement.textContent = 'Live'
 
                 // hide progress bar for count-up activities
