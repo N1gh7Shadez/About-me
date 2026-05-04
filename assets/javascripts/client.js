@@ -130,11 +130,12 @@ class DiscordDashboard {
             // <aitji> this will get file from "assets/images/games/..."
             // kept it lowercase for game name
             'minecraft': 'Minecraft.png',
-            'valorant': 'Valorant.png',    // <aitji> i don't have valorant icon : use file from images
+            'valorant': 'Valorant.png',
             'roblox': '../Roblox.png',
             'hollow knight: silksong': 'HollowKnight.png',
             'google play games': 'Google Play Game.png',
             'cookierun: kingdom': 'CookierunKingdom.png',
+            'walk of life': 'wol.png',
         }
 
         this.rpcData = null
