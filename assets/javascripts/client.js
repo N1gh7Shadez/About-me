@@ -119,7 +119,7 @@ class DiscordDashboard {
             { name: 'Tiktok', url: 'https://www.tiktok.com/@n1gh7shadez', img: "../../assets/images/Tiktok.png" },
             { name: 'Twitch', url: 'https://www.twitch.tv/n1gh7shadez', img: "../../assets/images/Twitch.png" },
             { name: 'Spotify', url: 'https://open.spotify.com/user/ibpz1xtf2pj9a7anrvnft1ygl', img: "../../assets/images/Spotify.png" },
-            { name: 'Discord', url: 'https://discord.com/invite/JZVN5h8Nqw', img: "../../assets/images/Discord.png" },
+            { name: 'Discord', url: 'https://discord.com/users/658664592209215493', img: "../../assets/images/Discord.png" },
             { name: 'Roblox', url: 'https://www.roblox.com/users/1207490727/profile', img: "../../assets/images/Roblox.png" },
             { name: 'Riot', url: 'N1gh7Shadez#17250', img: "../../assets/images/Riot.png" },
             // { name: 'RoV', url: 'N1gh7Shadez', img: "../../assets/images/RoV.png" },
