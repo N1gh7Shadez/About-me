@@ -732,7 +732,7 @@ class DiscordDashboard {
     async startDiscordRPCFetching() {
         const fetchRPC = async () => {
             try {
-                const response = await fetch('https://n1gh7shadez.vercel.app/api/dsc-status')
+                const response = await fetch('https://n1gh7shadez.aitji.xyz/api/dsc-status')
                 const data = await response.json()
 
                 if (data.cached && this.cacheStartTime === null) this.cacheStartTime = Date.now() - (data.cache_age * 1000)
@@ -989,7 +989,7 @@ const preventDrag = el => {
 // GET
 async function getCount() {
     if (!countEl) return
-    const res = await fetch('https://n1gh7shadez.vercel.app/api/visit')
+    const res = await fetch('https://n1gh7shadez.aitji.xyz/api/visit')
     const data = await res.json()
     countEl.textContent = `${formatInt(data.count)}`
     localStorage.setItem('last-count', data.count)
@@ -998,7 +998,7 @@ async function getCount() {
 // POST
 async function addVisit() {
     if (!countEl) return
-    const res = await fetch('https://n1gh7shadez.vercel.app/api/visit', { method: 'POST' })
+    const res = await fetch('https://n1gh7shadez.aitji.xyz/api/visit', { method: 'POST' })
     const data = await res.json()
     countEl.textContent = `${formatInt(data.count)}`
     localStorage.setItem('last-count', data.count)
