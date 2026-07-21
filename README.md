@@ -3,5 +3,5 @@ mewo, this is *N1gh7Shadez*'s profile
 - [license](https://raw.githubusercontent.com/N1gh7Shadez/About-me/refs/heads/main/LICENSE) AGPL-3.0
 
 contributors
-- [aitji](https://github.com/aitji) curious full-stack developer, code optimizer who like the silly sand block game <sub>bedrock edition</sub> 
-- [N1gh7Shadez](https://github.com/N1gh7Shadez) he/him
+- [aitji](https://aitji.xyz) curious full-stack developer, code optimizer who like the silly sand block game <sub>bedrock edition</sub> 
+- [N1gh7Shadez](https://n1gh7shadez.aitji.xyz/) he/him
