@@ -115,7 +115,7 @@ class DiscordDashboard {
         this.games = [
             { name: 'Discord', url: 'https://discord.com/users/658664592209215493', img: "../../assets/images/Discord.png" },
             { name: 'Facebook', url: 'https://www.facebook.com/N1gh7Shadez', img: "../../assets/images/Facebook.png" },
-            { name: 'Instagram', url: 'https://www.instagram.com/_n1ghtshade_/profilecard', img: "../../assets/images/Instagram.png" },
+            { name: 'Instagram', url: 'https://www.instagram.com/n1gh7shadez?igsh=MTFnNzZjbWc2dm5zMA==', img: "../../assets/images/Instagram.png" },
             // { name: 'Tiktok', url: 'https://www.tiktok.com/@n1gh7shadez', img: "../../assets/images/Tiktok.png" },
             { name: 'Youtube', url: 'https://www.youtube.com/@n1ghtshadez?sub_confirmation=1', img: "../../assets/images/Youtube.png" },
             { name: 'Twitch', url: 'https://www.twitch.tv/n1gh7shadez', img: "../../assets/images/Twitch.png" },
