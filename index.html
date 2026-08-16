@@ -22,11 +22,14 @@
     <link rel="stylesheet" href="./assets/styles/client.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-97G69K0ZLC"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
 
-      gtag('config', 'G-97G69K0ZLC');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-97G69K0ZLC');
     </script>
 </head>
 
@@ -86,6 +89,14 @@
                             <span id="currentTime">0:00</span>
                             <span id="totalTime">2:32</span>
                         </div>
+                        <div class="volume-controls">
+                            <button class="volume-button" id="volumeButton" type="button" aria-label="Mute music">
+                                <i class="fas fa-volume-high" id="volumeIcon" aria-hidden="true"></i>
+                            </button>
+                            <input class="volume-slider" id="volumeSlider" type="range" min="0" max="100" step="1"
+                                value="5" aria-label="Music volume">
+                            <output class="volume-value" id="volumeValue" for="volumeSlider">5%</output>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,6 +118,11 @@
         </div>
     </div>
 
+    <script src="./assets/javascripts/ui.js"></script>
+    <script src="./assets/javascripts/dashboard-core.js"></script>
+    <script src="./assets/javascripts/dashboard-audio.js"></script>
+    <script src="./assets/javascripts/dashboard-rpc.js"></script>
+    <script src="./assets/javascripts/games-scroll.js"></script>
     <script src="./assets/javascripts/client.js"></script>
     <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js'
         data-cf-beacon='{"token": "055326b106614f0bbe1fe8790214bdb3"}'></script>

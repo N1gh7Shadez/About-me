@@ -1,0 +1,260 @@
+.skeleton {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.1) 25%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border-radius: 5px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton-text {
+    height: 20px;
+    margin: 5px 0;
+}
+
+.skeleton-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .profile-section {
+        justify-content: center;
+        min-width: auto;
+    }
+
+    .user-info h1 {
+        font-size: 1.8rem;
+    }
+
+    .welcome-text {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+        max-width: 100%;
+    }
+
+    .discord-rpc {
+        padding: 20px;
+    }
+
+    .rpc-content {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        text-align: left;
+    }
+
+    .activity-image {
+        align-self: center;
+        justify-self: center;
+    }
+
+    .buttons-section {
+        justify-content: center;
+        grid-column: 1;
+    }
+}
+
+@media (max-width: 620px) {
+    .avatar {
+        width: 70px;
+        height: 70px;
+    }
+
+    .status-dot {
+        width: 18px;
+        height: 18px;
+        border-width: 2px;
+    }
+
+    .user-info h1 {
+        font-size: 1.6rem;
+    }
+
+    .welcome-text {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .followers {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        position: fixed;
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+        left: auto;
+        transform: none;
+        z-index: 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .games-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .discord-rpc {
+        padding: 15px;
+    }
+
+    .rpc-header {
+        gap: 10px;
+    }
+
+    .rpc-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .activity-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .activity-title {
+        font-size: 1.1rem;
+    }
+
+    .activity-details {
+        font-size: 0.9rem;
+    }
+
+    .buttons-section {
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .rpc-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .user-info h1 {
+        font-size: 1.4rem;
+    }
+
+    .welcome-text {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+
+    .activity-title {
+        font-size: 1rem;
+    }
+
+    .activity-details {
+        font-size: 0.8rem;
+    }
+}
+
+.games-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+    margin-top: -15px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin-bottom: 0;
+}
+
+@media (max-width: 748px) {
+    .games-grid {
+        display: block;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 10px 15px;
+        position: relative;
+        touch-action: pan-x pan-y;
+    }
+
+    .games-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .games-grid-track {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: max-content;
+        backface-visibility: hidden;
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+    }
+
+    .games-grid-track>div {
+        flex-shrink: 0;
+        min-width: auto;
+    }
+
+    .games-grid.is-auto-scrolling {
+        overflow-x: hidden;
+    }
+
+    .games-grid.is-auto-scrolling .games-grid-track {
+        animation: games-grid-auto-scroll var(--games-scroll-duration, 45s) linear infinite;
+    }
+}
+
+@keyframes games-grid-auto-scroll {
+    from {
+        transform: translate3d(var(--games-scroll-start, -448px), 0, 0);
+    }
+
+    to {
+        transform: translate3d(var(--games-scroll-end, -896px), 0, 0);
+    }
+}
+
+.game-icon {
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.game-icon:hover {
+    transform: scale(1.1);
+}
+
+.game-icon img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+}
